@@ -5,6 +5,7 @@ const app = express()
 
 const fileExplore = require('./fileExplore')
 const uploadFile = require('./uploadFile')
+const downloadFile = require('./downloadFile')
 
 // dependency
 app.use(helmet())
@@ -14,5 +15,6 @@ app.use(cors())
 //router
 app.use('/file-explore', fileExplore.route)
 app.use('/upload', uploadFile.route)
+app.use('/download', downloadFile.route)
 
 module.exports = app
