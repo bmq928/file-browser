@@ -2,7 +2,7 @@ const http = require('http')
 const config = require('config')
 
 const app = require('./server')
-const PORT = config.get('PORT')
+const PORT = config.get('port')
 
 // const fileExplore = 
 

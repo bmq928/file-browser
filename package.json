@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./src/index.js"
+    "dev": "nodemon ./src/index.js --ignore node_modules",
+    "test": "jest ./src"
   },
   "author": "",
   "license": "ISC",
@@ -12,10 +13,12 @@
     "config": "^2.0.1",
     "cors": "^2.8.4",
     "express": "^4.16.4",
-    "helmet": "^3.14.0"
+    "helmet": "^3.14.0",
+    "multer": "^1.4.1"
   },
   "devDependencies": {
     "eslint": "^5.8.0",
+    "jest": "^23.6.0",
     "nodemon": "^1.18.5"
   }
 }
