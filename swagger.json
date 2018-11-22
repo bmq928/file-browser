@@ -1,0 +1,138 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "API DOCS",
+    "description": "Api document for file-browser-backend",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/download": {
+      "get": {
+        "parameters":[
+          {
+            "in":"query",
+            "name": "file_path",
+            "required": true,
+            "schema": "string",
+            "description": "path to file"
+          }
+        ],
+        "summary": "Download file with query string is path",
+        "responses": {
+          "400": {
+            "description": "Error when the file is not existed",
+            "schema": {
+              "type": "object",
+              "properties":{
+                "error" :{
+                  "type": "string",
+                  "description": "error message"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/file-explorer/recursive": {
+      "get": {
+        "parameters":[
+          {
+            "in":"query",
+            "name": "dir",
+            "required": true,
+            "schema": "string",
+            "description": "path that you want to explore"
+          }
+        ],
+        "summary": "Explorer everything inside",
+        "responses": {
+          "400": {
+            "description": "Error",
+            "schema": {
+              "type": "object",
+              "properties":{
+                "message" :{
+                  "type": "string",
+                  "description": "error message"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties":{
+                "data" :{
+                  "type": "object",
+                  "description": "data"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/file-explorer/shallow": {
+      "get": {
+        "parameters":[
+          {
+            "in":"query",
+            "name": "dir",
+            "required": true,
+            "schema": "string",
+            "description": "path that you want to explore"
+          }
+        ],
+        "summary": "Explorer 1 level inside",
+        "responses": {
+          "400": {
+            "description": "Error",
+            "schema": {
+              "type": "object",
+              "properties":{
+                "message" :{
+                  "type": "string",
+                  "description": "error message"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties":{
+                "data" :{
+                  "type": "object",
+                  "description": "data"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/upload": {
+      "post": {
+        "parameters":[],
+        "summary": "upload file to server",
+        "responses": {}
+      }
+    }
+  }
+}
