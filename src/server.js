@@ -3,9 +3,9 @@ const helmet = require('helmet')
 const cors = require('cors')
 const app = express()
 
-const fileExplore = require('./fileExplore')
-const uploadFile = require('./uploadFile')
-const downloadFile = require('./downloadFile')
+const fileExplore = require('./file-explore')
+const uploadFile = require('./upload-file')
+const downloadFile = require('./download-file')
 
 // dependency
 app.use(helmet())
