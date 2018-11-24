@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon ./src/index.js --ignore node_modules",
-    "test": " npx run lint && jest ./src",
+    "test": " npm run lint && jest ./src",
     "clean": "rm -rf ./fileUpload",
     "lint": "eslint ./src"
   },
@@ -15,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.361.0",
     "config": "^2.0.1",
     "cors": "^2.8.4",
     "express": "^4.16.4",

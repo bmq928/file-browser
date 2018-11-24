@@ -1,8 +1,10 @@
-const { readDir, pathStat, FolderTree } = require('../utils')
+// const { readDir, pathStat, FolderTree } = require('../utils')
+const { pathStat, readDir } = require('../_file-sys')
+const { FolderTree } = require('../_libs')
 const path = require('path')
 
 //should try catch when use this function
-//because it doesnt handle exception
+//because it doesnt handle exception`
 const readdirRecursive = async dir => {
   const curDirectory = await pathStat(dir)
   const tree = new FolderTree(path.basename(dir))
@@ -37,7 +39,7 @@ const readdirRecursive = async dir => {
 const readdirShallow = async dir => {
   const curDirectory = await pathStat(dir)
   const rootName = path.basename(dir)
-  
+
   //file
   if (curDirectory.isFile()) {
     return new FolderTree(rootName)
@@ -48,10 +50,10 @@ const readdirShallow = async dir => {
   const tree = new FolderTree(rootName, false)
   const stats = await Promise.all(items.map(i => pathStat(path.join(dir, i))))
 
-  for(const i in stats) {
+  for (const i in stats) {
     const stat = stats[i]
     const addedItem = items[i]
-    if(stat.isFile()) tree.addFile(addedItem)
+    if (stat.isFile()) tree.addFile(addedItem)
     else tree.addFolder(addedItem)
   }
 
