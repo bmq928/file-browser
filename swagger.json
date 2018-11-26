@@ -21,13 +21,25 @@
   "paths": {
     "/download": {
       "get": {
-        "parameters":[
+        "parameters": [
           {
-            "in":"query",
+            "in": "query",
             "name": "file_path",
             "required": true,
             "schema": "string",
             "description": "path to file"
+          },
+          {
+            "in": "query",
+            "name": "s3",
+            "schema": "string",
+            "description": "using s3 or not"
+          },
+          {
+            "in": "query",
+            "name": "bucket",
+            "schema": "string",
+            "description": "if use s3, this is bucket use"
           }
         ],
         "summary": "Download file with query string is path",
@@ -36,8 +48,8 @@
             "description": "Error when the file is not existed",
             "schema": {
               "type": "object",
-              "properties":{
-                "error" :{
+              "properties": {
+                "messsage": {
                   "type": "string",
                   "description": "error message"
                 }
@@ -49,20 +61,22 @@
     },
     "/file-explorer/recursive": {
       "get": {
-        "parameters":[
+        "parameters": [
           {
-            "in":"query",
+            "in": "query",
             "name": "dir",
             "required": true,
             "schema": "string",
             "description": "path that you want to explore"
-          },{
-            "in":"query",
+          },
+          {
+            "in": "query",
             "name": "s3",
             "schema": "string",
             "description": "if you want to use s3"
-          },{
-            "in":"query",
+          },
+          {
+            "in": "query",
             "name": "bucket",
             "schema": "string",
             "description": "bucket you want to explore"
@@ -74,8 +88,8 @@
             "description": "Error",
             "schema": {
               "type": "object",
-              "properties":{
-                "message" :{
+              "properties": {
+                "message": {
                   "type": "string",
                   "description": "error message"
                 }
@@ -86,8 +100,8 @@
             "description": "Success",
             "schema": {
               "type": "object",
-              "properties":{
-                "data" :{
+              "properties": {
+                "data": {
                   "type": "object",
                   "description": "data"
                 }
@@ -99,20 +113,22 @@
     },
     "/file-explorer/shallow": {
       "get": {
-        "parameters":[
+        "parameters": [
           {
-            "in":"query",
+            "in": "query",
             "name": "dir",
             "required": true,
             "schema": "string",
             "description": "path that you want to explore"
-          },{
-            "in":"query",
+          },
+          {
+            "in": "query",
             "name": "s3",
             "schema": "string",
             "description": "if you want to use s3"
-          },{
-            "in":"query",
+          },
+          {
+            "in": "query",
             "name": "bucket",
             "schema": "string",
             "description": "bucket you want to explore"
@@ -124,8 +140,8 @@
             "description": "Error",
             "schema": {
               "type": "object",
-              "properties":{
-                "message" :{
+              "properties": {
+                "message": {
                   "type": "string",
                   "description": "error message"
                 }
@@ -136,8 +152,8 @@
             "description": "Success",
             "schema": {
               "type": "object",
-              "properties":{
-                "data" :{
+              "properties": {
+                "data": {
                   "type": "object",
                   "description": "data"
                 }
@@ -149,9 +165,63 @@
     },
     "/upload": {
       "post": {
-        "parameters":[],
-        "summary": "upload file to server",
-        "responses": {}
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "upload-file",
+            "required": true,
+            "description": "field that need for multipart/form-data"
+          },
+          {
+            "in": "query",
+            "name": "location",
+            "required": true,
+            "schema": "string",
+            "description": "folder to store file"
+          },
+          {
+            "in": "query",
+            "name": "s3",
+            "schema": "string",
+            "description": "using s3 or not"
+          },
+          {
+            "in": "query",
+            "name": "bucket",
+            "schema": "string",
+            "description": "if use s3, this is bucket use"
+          }
+        ],
+        "summary": "Upload a file",
+        "responses": {
+          "400": {
+            "description": "Error when the file is not existed",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "messsage": {
+                  "type": "string",
+                  "description": "error message"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "string",
+                  "description": "data object"
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

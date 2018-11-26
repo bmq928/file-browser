@@ -1,7 +1,6 @@
 const route = require('express').Router()
 const multer = require('multer')
 const controller = require('./controller')
-const { upload } = require('../_file-sys')
 
 route.use(multer().single('upload-file'))
 route.post('/', async (req, res) => {
