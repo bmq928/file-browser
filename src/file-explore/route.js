@@ -3,21 +3,25 @@ const { readdirRecursive, readdirShallow } = require('./controller')
 
 route.get('/recursive', async (req, res) => {
   try {
-    const { dir } = req.query
-    const data = await readdirRecursive(dir)
+    const { dir, s3, bucket } = req.query
+    const options = { s3, bucket }
+    const data = await readdirRecursive(dir, options)
     res.status(200).json({ data })
   } catch (error) {
-    res.status(404).json({ message: `Directory doesn't exist ` })
+    console.log(error)
+    res.status(404).json({ message: error.message })
   }
 })
 
 route.get('/shallow', async (req, res) => {
   try {
-    const { dir } = req.query
-    const data = await readdirShallow(dir)
+    const { dir, s3, bucket } = req.query
+    const options = { s3, bucket }
+    const data = await readdirShallow(dir, options)
     res.status(200).json({ data })
   } catch (error) {
-    res.status(404).json({ message: `Directory doesn't exist ` })
+    console.log(error)
+    res.status(404).json({ message: error.message })
   }
 })
 

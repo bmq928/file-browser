@@ -26,8 +26,8 @@ const withS3 = (bucket, dir) => {
           content => content.Key === dir || content.Key === dir + '/'
         )[0]
 
-
-        if (!foundContent) throw new Error('Directory is not founded')
+        console.log({dir, bucket})
+        if (!foundContent) return reject(new Error('Directory is not founded')) 
 
         // to sync with version that using fs
         // folder end with /
@@ -45,9 +45,11 @@ const withS3 = (bucket, dir) => {
   })
 }
 
+// withS3('test-quang', 'folder').then(data => console.log(data))
+
 module.exports = (dir, options) => {
   if (options && options.s3) {
-    if(!options.bucket) return Promise.reject(new Error('Bucket is required'))
+    if (!options.bucket) return Promise.reject(new Error('Bucket is required'))
 
     return withS3(options.bucket, dir)
   }
