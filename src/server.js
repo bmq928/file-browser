@@ -5,6 +5,7 @@ const app = express()
 const swaggerUi = require('swagger-ui-express')
 const swaggerDoc = require('../swagger.json')
 
+// expose module
 const fileExplore = require('./file-explore')
 const uploadFile = require('./upload-file')
 const downloadFile = require('./download-file')

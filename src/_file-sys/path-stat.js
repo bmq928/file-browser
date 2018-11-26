@@ -22,14 +22,12 @@ const withS3 = (bucket, dir) => {
     })
       .promise()
       .then(data => {
-        console.log(data)
-        console.log(dir)
         const foundContent = data.Contents.filter(
           content => content.Key === dir || content.Key === dir + '/'
         )[0]
 
 
-        if (!foundContent) throw new Error('No content is founded')
+        if (!foundContent) throw new Error('Directory is not founded')
 
         // to sync with version that using fs
         // folder end with /
