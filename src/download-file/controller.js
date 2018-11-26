@@ -1,14 +1,30 @@
-const path = require('path')
-const rootProjPath = path.join(__dirname, '..', '..')
+const { getFile } = require('../_file-sys')
 
-const getFile = (filePath) => {
-  if (!filePath) throw new Error('file_path is required')
+const download = (filePath, options, res) => {
+  return new Promise(async (resolve, reject) => {
 
-  filePath = path.isAbsolute(filePath)
-      ? filePath
-      : path.join(rootProjPath, filePath)
+    if (!filePath) return reject(Error('file_path is required'))
 
-  return filePath
+    try {
+
+      const file = await getFile(filePath, options)
+
+      
+
+      res.setHeader('Content-disposition', 'attachment; filename=' + file.name)
+      res.setHeader('Content-type', file.contentType)
+
+      file.body.pipe(res)
+
+      // res.send('some')
+
+      res.on('end', () => resolve())
+    } catch (error) {
+      reject(error)
+    }
+
+  })
 }
 
-module.exports = { getFile }
+module.exports = { download }
+

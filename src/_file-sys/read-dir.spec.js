@@ -1,5 +1,4 @@
 const readDir = require('./read-dir')
-const path = require('path')
 
 describe('_file-sys', () => {
   describe('path-stat', () => {
