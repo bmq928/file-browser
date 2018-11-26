@@ -6,42 +6,55 @@ const { s3 } = require('../_aws')
 const withFs = util.promisify(fs.readdir)
 
 const withS3 = (bucket, dir) => {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     //default of s3 dont use / at start
     //but in fs system use /
     if (dir[0] === '/') dir = dir.substr(1)
+    try {
+      
+      const params = { Bucket: bucket }
+      const data = await s3.listObjects(params).promise()
 
-    s3.listObjects({ Bucket: bucket })
-      .promise()
-      .then(data => {
-        // console.log(data)
-        // // match all item return by s3 that have key start with dir
-        // // depth = 1
-        // const regex = new RegExp(`^${dir}/.{1,}`, 'g')
-        // const items = data.Contents
-        //   .filter(i => !!i.Key.match(regex)) // matching pattern
-        //   .map(i => i.Key.split('/')[1]) //get depth=1 item
-        //   .filter((item, idx, arr) => arr.indexOf(item) === idx) // remove duplicate
+      const regex = new RegExp(`^${dir}/.{1,}`, 'g')
+      const items = data.Contents
+        .filter(i => !!i.Key.match(regex)) // matching pattern
+        .map(i => {
+          //remove prefix with curent diretory
+          // e.g: dir=folder, i = folder/item/abc => curItem = item/abc
+          const curItem = i.Key.split(`${dir}/`)[1]
 
-        // resolve(items)
+          // depth1Item = item
+          const depth1Item = curItem.split('/')[0]
+          return depth1Item
+        })
+        .filter((item, idx, arr) => arr.indexOf(item) === idx) //remove duplicate
 
-        const regex = new RegExp(`^${dir}/.{1,}`, 'g')
-        const items = data.Contents
-          .filter(i => !!i.Key.match(regex)) // matching pattern
-          .map(i => {
-            //remove prefix with curent diretory
-            // e.g: dir=folder, i = folder/item/abc => curItem = item/abc
-            const curItem = i.Key.split(`${dir}/`)[1]
+      resolve(items)
 
-            // depth1Item = item
-            const depth1Item = curItem.split('/')[0]
-            return depth1Item
-          })
-          .filter((item, idx, arr) => arr.indexOf(item) === idx) //remove duplicate
+    } catch (error) {
+      reject(error)
+    }
+    // s3.listObjects({ Bucket: bucket })
+    //   .promise()
+    //   .then(data => {
 
-        resolve(items)
-      })
-      .catch(err => reject(err))
+    //     const regex = new RegExp(`^${dir}/.{1,}`, 'g')
+    //     const items = data.Contents
+    //       .filter(i => !!i.Key.match(regex)) // matching pattern
+    //       .map(i => {
+    //         //remove prefix with curent diretory
+    //         // e.g: dir=folder, i = folder/item/abc => curItem = item/abc
+    //         const curItem = i.Key.split(`${dir}/`)[1]
+
+    //         // depth1Item = item
+    //         const depth1Item = curItem.split('/')[0]
+    //         return depth1Item
+    //       })
+    //       .filter((item, idx, arr) => arr.indexOf(item) === idx) //remove duplicate
+
+    //     resolve(items)
+    //   })
+    //   .catch(err => reject(err))
   })
 }
 

@@ -12,36 +12,63 @@ const withFs = dir => {
 }
 
 const withS3 = (bucket, dir) => {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     //default of s3 dont use / at start
     //but in fs system use /
     if (dir[0] === '/') dir = dir.substr(1)
 
-    s3.listObjects({
-      Bucket: bucket
-    })
-      .promise()
-      .then(data => {
-        const foundContent = data.Contents.filter(
-          content => content.Key === dir || content.Key === dir + '/'
-        )[0]
+    try {
 
-        console.log({dir, bucket})
-        if (!foundContent) return reject(new Error('Directory is not founded')) 
+      const params = { Bucket: bucket }
+      const data = await s3.listObjects(params).promise()
 
-        // to sync with version that using fs
-        // folder end with /
-        // file doesnt end with /
-        return resolve({
-          isFile: () => {
-            return foundContent.Key[foundContent.Key.length - 1] !== '/'
-          },
-          isDirectory: () => {
-            return foundContent.Key[foundContent.Key.length - 1] === '/'
-          }
-        })
+      const foundContent = data.Contents.filter(
+        content => content.Key === dir || content.Key === dir + '/'
+      )[0]
+
+      if (!foundContent) return reject(new Error('Directory is not founded'))
+
+      // to sync with version that using fs
+      // folder end with /
+      // file doesnt end with /
+      return resolve({
+        isFile: () => {
+          return foundContent.Key[foundContent.Key.length - 1] !== '/'
+        },
+        isDirectory: () => {
+          return foundContent.Key[foundContent.Key.length - 1] === '/'
+        }
       })
-      .catch(err => reject(err))
+
+    } catch (error) {
+      reject(error)
+    }
+
+    // s3.listObjects({
+    //   Bucket: bucket
+    // })
+    //   .promise()
+    //   .then(data => {
+    //     const foundContent = data.Contents.filter(
+    //       content => content.Key === dir || content.Key === dir + '/'
+    //     )[0]
+
+    //     console.log({ dir, bucket })
+    //     if (!foundContent) return reject(new Error('Directory is not founded'))
+
+    //     // to sync with version that using fs
+    //     // folder end with /
+    //     // file doesnt end with /
+    //     return resolve({
+    //       isFile: () => {
+    //         return foundContent.Key[foundContent.Key.length - 1] !== '/'
+    //       },
+    //       isDirectory: () => {
+    //         return foundContent.Key[foundContent.Key.length - 1] === '/'
+    //       }
+    //     })
+    //   })
+    //   .catch(err => reject(err))
   })
 }
 
