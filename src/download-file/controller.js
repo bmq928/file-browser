@@ -9,14 +9,10 @@ const download = (filePath, options, res) => {
 
       const file = await getFile(filePath, options);
 
-      
-
       res.setHeader('Content-disposition', 'attachment; filename=' + file.name);
       res.setHeader('Content-type', file.contentType);
 
       file.body.pipe(res);
-
-      // res.send('some')
 
       res.on('end', () => resolve())
     } catch (error) {
