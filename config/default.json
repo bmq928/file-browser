@@ -2,9 +2,9 @@
   "port": 3000,
   "s3":false,
   "aws": {
-    "accessKeyId": "AKIAIPM23EMJZ7FVXVUQ",
-    "secretAccessKey": "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",
-    "bucket": "test-quang"
+    "accessKeyId": "",
+    "secretAccessKey": "",
+    "bucket": ""
   },
   "rootFolder": "/home/bui/Desktop/rootTets"
 }

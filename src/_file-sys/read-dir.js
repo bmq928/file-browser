@@ -9,19 +9,24 @@ const withS3 = (bucket, dir) => {
   return new Promise(async (resolve, reject) => {
     //default of s3 dont use / at start
     //but in fs system use /
+    
     if (dir[0] === '/') dir = dir.substr(1);
+    // and dir = / is a special case
+    // therefore we muse have 2 case: dir = '' and rest
+
+
     try {
-      
+
       const params = { Bucket: bucket };
       const data = await s3.listObjects(params).promise();
 
-      const regex = new RegExp(`^${dir}/.{1,}`, 'g');
+      const regex = !dir ? /.*/ : new RegExp(`^${dir}/.{1,}`, 'g');
       const items = data.Contents
         .filter(i => !!i.Key.match(regex)) // matching pattern
         .map(i => {
           //remove prefix with curent diretory
           // e.g: dir=folder, i = folder/item/abc => curItem = item/abc
-          const curItem = i.Key.split(`${dir}/`)[1];
+          const curItem = !dir ? i.Key.split(`${dir}/`)[0] : i.Key.split(`${dir}/`)[1];
 
           // depth1Item = item
           const depth1Item = curItem.split('/')[0];
