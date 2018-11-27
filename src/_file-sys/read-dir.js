@@ -63,7 +63,7 @@ const withS3 = (bucket, dir) => {
   })
 };
 
-// withS3('test-quang', 'folder').then(data => console.log(data))
+// withS3('test-quang', '/').then(data => console.log(data))
 // withFs('.').then(data => console.log(data))
 
 module.exports = (dir, options) => {
