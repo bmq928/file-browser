@@ -13,22 +13,21 @@ const withFs = dir => {
 
 const withS3 = (bucket, dir) => {
   return new Promise(async (resolve, reject) => {
-    
+
     //special case
     if (dir === '' || dir === '/') return resolve({
       isDirectory: () => true,
       isFile: () => false
-    })  
+    })
 
     //default of s3 dont use / at start
     //but in fs system use /
-    if (dir[0] === '/') dir = dir.substr(1);
+    if (dir[0] === '/' || dir[0] === '\\') dir = dir.substr(1);
 
     try {
 
       const params = { Bucket: bucket };
       const data = await s3.listObjects(params).promise();
-
       const foundContent = data.Contents.filter(
         content => content.Key === dir || content.Key === dir + '/'
       )[0];
