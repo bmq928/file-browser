@@ -1,8 +1,8 @@
 class FolderTree {
   constructor(rootName, rootIsFile = false, files = [], folders = []) {
-    this.rootIsFile = rootIsFile
-    this.rootName = rootName
-    this.files = files
+    this.rootIsFile = rootIsFile;
+    this.rootName = rootName;
+    this.files = files;
     this.folders = folders
   }
 
@@ -15,4 +15,4 @@ class FolderTree {
   }
 }
 
-module.exports = FolderTree
+module.exports = FolderTree;

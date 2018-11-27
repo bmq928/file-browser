@@ -1,13 +1,13 @@
-const readDir = require('./read-dir')
+const readDir = require('./read-dir');
 
 describe('_file-sys', () => {
   describe('path-stat', () => {
 
     it('result should be a promise', () => {
-      const result1 = readDir(__dirname)
-      const result2 = readDir(__dirname, {s3:true})
+      const result1 = readDir(__dirname);
+      const result2 = readDir(__dirname, {s3:true});
 
-      expect(result1.toString()).toEqual('[object Promise]')
+      expect(result1.toString()).toEqual('[object Promise]');
       expect(result2.toString()).toEqual('[object Promise]')
     })
 
@@ -16,4 +16,4 @@ describe('_file-sys', () => {
     //   const result2 = readDir(__dirname, {s3:true, bucket})
     // })
   })
-})
+});

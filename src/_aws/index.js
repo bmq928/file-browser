@@ -1,11 +1,12 @@
-const AWS = require('aws-sdk')
+const AWS = require('aws-sdk');
+const config = require('config');
 const credential = {
-  accessKeyId: 'AKIAI5KUPQWUCXSAJAYA',
-  secretAccessKey: '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'
-}
+  accessKeyId: config.aws.accessKeyId,
+  secretAccessKey: config.aws.secretAccessKey
+};
 
-const s3 = new AWS.S3(credential)
+const s3 = new AWS.S3(credential);
 
 module.exports = {
   s3
-}
+};

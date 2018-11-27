@@ -1,4 +1,4 @@
-const upload = require('./upload')
+const upload = require('./upload');
 
 describe('_file-sys', () => {
   describe('upload-spec', () => {
@@ -16,4 +16,4 @@ describe('_file-sys', () => {
     //   const result2 = readDir(__dirname, {s3:true, bucket})
     // })
   })
-})
+});

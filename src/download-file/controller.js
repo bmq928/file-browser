@@ -1,20 +1,20 @@
-const { getFile } = require('../_file-sys')
+const { getFile } = require('../_file-sys');
 
 const download = (filePath, options, res) => {
   return new Promise(async (resolve, reject) => {
 
-    if (!filePath) return reject(Error('file_path is required'))
+    if (!filePath) return reject(Error('file_path is required'));
 
     try {
 
-      const file = await getFile(filePath, options)
+      const file = await getFile(filePath, options);
 
       
 
-      res.setHeader('Content-disposition', 'attachment; filename=' + file.name)
-      res.setHeader('Content-type', file.contentType)
+      res.setHeader('Content-disposition', 'attachment; filename=' + file.name);
+      res.setHeader('Content-type', file.contentType);
 
-      file.body.pipe(res)
+      file.body.pipe(res);
 
       // res.send('some')
 
@@ -24,7 +24,7 @@ const download = (filePath, options, res) => {
     }
 
   })
-}
+};
 
-module.exports = { download }
+module.exports = { download };
 

@@ -1,14 +1,14 @@
-const route = require('express').Router()
-const controller = require('./controller')
-const fs = require('fs')
+const route = require('express').Router();
+const controller = require('./controller');
+const fs = require('fs');
 
 route.get('/', async (req, res) => {
 
-  const filePath = req.query.file_path
+  const filePath = req.query.file_path;
   const options = {
     s3: req.query.s3,
     bucket: req.query.bucket
-  }
+  };
 
   try {
 
@@ -19,6 +19,6 @@ route.get('/', async (req, res) => {
   }
 
 
-})
+});
 
-module.exports = route
+module.exports = route;

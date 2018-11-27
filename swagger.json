@@ -172,8 +172,9 @@
           {
             "in": "formData",
             "name": "upload-file",
-            "required": true,
-            "description": "field that need for multipart/form-data"
+            "schema": "string",
+            "description": "field that need for multipart/form-data",
+            "required": true
           },
           {
             "in": "query",

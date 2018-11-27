@@ -1,5 +1,5 @@
-const FolderTree = require('./folder-tree')
+const FolderTree = require('./folder-tree');
 
 module.exports = {
   FolderTree
-}
+};
