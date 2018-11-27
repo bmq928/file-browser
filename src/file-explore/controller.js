@@ -19,7 +19,7 @@ const readdirRecursive = async (dir, options) => {
     tree.rootIsFile = true
   } else if (curDirectoryStat.isDirectory()) {
     const items = await readDir(dir, options);
-    console.log({items});
+    // console.log({items});
     //recursive
     //readir in every item in folder
     const subTrees = await Promise.all(
@@ -33,7 +33,7 @@ const readdirRecursive = async (dir, options) => {
     }
   }
 
-  return tree
+  return tree;
 };
 
 // readdirRecursive('folder', {s3:true, bucket: 'test-quang'})
@@ -63,7 +63,7 @@ const readdirShallow = async (dir, options) => {
     else tree.addFolder(addedItem)
   }
 
-  return tree
+  return tree;
 };
 
 module.exports = { readdirRecursive, readdirShallow };

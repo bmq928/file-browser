@@ -1,14 +1,14 @@
 const route = require('express').Router();
 const controller = require('./controller');
-const fs = require('fs');
+const config = require('config');
+const options = {
+  s3: config.get('s3'),
+  bucket: config.get('aws.bucket')
+};
 
 route.get('/', async (req, res) => {
 
   const filePath = req.query.file_path;
-  const options = {
-    s3: req.query.s3,
-    bucket: req.query.bucket
-  };
 
   try {
 

@@ -1,10 +1,14 @@
 const route = require('express').Router();
 const { readdirRecursive, readdirShallow } = require('./controller');
+const config = require('config');
+const options = {
+  s3: config.get('s3'),
+  bucket: config.get('aws.bucket')
+};
 
 route.get('/recursive', async (req, res) => {
   try {
-    const { dir, s3, bucket } = req.query;
-    const options = { s3, bucket };
+    const { dir } = req.query;
     const data = await readdirRecursive(dir, options);
     res.status(200).json({ data })
   } catch (error) {
@@ -15,8 +19,7 @@ route.get('/recursive', async (req, res) => {
 
 route.get('/shallow', async (req, res) => {
   try {
-    const { dir, s3, bucket } = req.query;
-    const options = { s3, bucket };
+    const { dir } = req.query;
     const data = await readdirShallow(dir, options);
     res.status(200).json({ data })
   } catch (error) {
