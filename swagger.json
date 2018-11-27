@@ -28,18 +28,6 @@
             "required": true,
             "schema": "string",
             "description": "path to file"
-          },
-          {
-            "in": "query",
-            "name": "s3",
-            "schema": "string",
-            "description": "using s3 or not"
-          },
-          {
-            "in": "query",
-            "name": "bucket",
-            "schema": "string",
-            "description": "if use s3, this is bucket use"
           }
         ],
         "summary": "Download file with query string is path",
@@ -68,18 +56,6 @@
             "required": true,
             "schema": "string",
             "description": "path that you want to explore"
-          },
-          {
-            "in": "query",
-            "name": "s3",
-            "schema": "string",
-            "description": "if you want to use s3"
-          },
-          {
-            "in": "query",
-            "name": "bucket",
-            "schema": "string",
-            "description": "bucket you want to explore"
           }
         ],
         "summary": "Explorer everything inside",
@@ -120,18 +96,6 @@
             "required": true,
             "schema": "string",
             "description": "path that you want to explore"
-          },
-          {
-            "in": "query",
-            "name": "s3",
-            "schema": "string",
-            "description": "if you want to use s3"
-          },
-          {
-            "in": "query",
-            "name": "bucket",
-            "schema": "string",
-            "description": "bucket you want to explore"
           }
         ],
         "summary": "Explorer 1 level inside",
@@ -182,18 +146,6 @@
             "required": true,
             "schema": "string",
             "description": "folder to store file"
-          },
-          {
-            "in": "query",
-            "name": "s3",
-            "schema": "string",
-            "description": "using s3 or not"
-          },
-          {
-            "in": "query",
-            "name": "bucket",
-            "schema": "string",
-            "description": "if use s3, this is bucket use"
           }
         ],
         "summary": "Upload a file",
@@ -216,7 +168,7 @@
               "type": "object",
               "properties": {
                 "data": {
-                  "type": "string",
+                  "type": "object",
                   "description": "data object"
                 }
               }
