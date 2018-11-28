@@ -14,7 +14,7 @@ const withFs = (file, location = '') => {
         filePath,
         success: true
       };
-      
+
       resolve(data)
     })
 
@@ -25,10 +25,10 @@ const withS3 = (bucket, file, location = '') => {
   return new Promise(async (resolve, reject) => {
 
     try {
-
       const params = {
         Bucket: bucket,
-        Key: path.join(location, file.originalname),
+        // Key: path.join(location, file.originalname),
+        Key: location + "/" + file.originalname,
         Body: file.buffer
       };
 
