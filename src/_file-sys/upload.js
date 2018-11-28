@@ -28,7 +28,7 @@ const withS3 = (bucket, file, location = '') => {
       const params = {
         Bucket: bucket,
         // Key: path.join(location, file.originalname),
-        Key: location + "/" + file.originalname,
+        Key: location + '/' + file.originalname,
         Body: file.buffer
       };
 
