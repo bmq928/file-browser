@@ -47,7 +47,7 @@
         }
       }
     },
-    "/file-explorer/recursive": {
+    "/file-explore/recursive": {
       "get": {
         "parameters": [
           {

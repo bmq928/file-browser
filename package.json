@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+		"start":"export NODE_ENV=production && node ./src/index.js",
     "dev": "nodemon ./src/index.js --ignore ./node_modules",
     "test": " npm run lint && jest ./src",
     "clean": "rm -rf ./fileUpload",
