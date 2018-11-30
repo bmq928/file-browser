@@ -17,7 +17,7 @@ const readdirRecursive = async (dir, options) => {
 
   if (curDirectoryStat.isFile()) {
 
-    tree.addFile(dir);
+    tree.addFile(dir, true, briefDir);
     tree.rootIsFile = true
   } else if (curDirectoryStat.isDirectory()) {
     const items = await readDir(dir, options);
@@ -32,8 +32,11 @@ const readdirRecursive = async (dir, options) => {
     for (const subTree of subTrees) {
       const itemName = subTree.rootName;
       const itemPath = path.join(briefDir, itemName);
-      if (subTree.rootIsFile) tree.addFile(itemName,itemPath );
-      else tree.addFolder(subTree, itemPath)
+      const childFiles = subTree.files
+      const childFolders = subTree.folders
+
+      if (subTree.rootIsFile) tree.addFile(itemName, itemPath, childFiles, childFolders);
+      else tree.addFolder(itemName, itemPath, childFiles, childFolders);
     }
   }
 
@@ -51,7 +54,7 @@ const readdirShallow = async (dir, options) => {
   const rootName = path.basename(dir);
   const briefDir = options.s3 ? dir : dir.replace(rootFolderFs, '') // parameter dir
   // dir = options.s3 ? dir : path.join(rootFolderFs, dir) //actual dir for calculation
-  
+
 
   //file
   if (curDirectoryStat.isFile()) {

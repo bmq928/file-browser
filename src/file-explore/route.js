@@ -16,8 +16,9 @@ route.get('/recursive', async (req, res) => {
 
     const data = await readdirRecursive(dir, options);
     res.status(200).json({ data })
+    
   } catch (error) {
-    console.log(error);
+    
     res.status(404).json({ message: error.message })
   }
 });

@@ -3,3 +3,4 @@ fileUpload
 /config/production.json
 /config/development.json
 /.idea/
+.vscode
