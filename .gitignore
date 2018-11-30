@@ -1,4 +1,5 @@
 node_modules
 fileUpload
 /config/production.json
+/config/development.json
 /.idea/

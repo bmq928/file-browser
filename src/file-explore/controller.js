@@ -2,24 +2,26 @@
 const { pathStat, readDir } = require('../_file-sys');
 const { FolderTree } = require('../_libs');
 const path = require('path');
+const config = require('config');
+const rootFolderFs = config.get('rootFolder');
 
 //should try catch when use this function
 //because it doesnt handle exception`
 const readdirRecursive = async (dir, options) => {
 
-  if(!dir) throw new Error('dir is required');
-
+  if (!dir) throw new Error('dir is required');
+  const briefDir = options.s3 ? dir : dir.replace(rootFolderFs, '') // parameter dir
 
   const curDirectoryStat = await pathStat(dir, options);
-  const tree = new FolderTree(path.basename(dir));
+  const tree = new FolderTree(path.basename(dir), false, briefDir);
 
   if (curDirectoryStat.isFile()) {
-    
+
     tree.addFile(dir);
     tree.rootIsFile = true
   } else if (curDirectoryStat.isDirectory()) {
     const items = await readDir(dir, options);
-    // console.log({items});
+
     //recursive
     //readir in every item in folder
     const subTrees = await Promise.all(
@@ -28,8 +30,10 @@ const readdirRecursive = async (dir, options) => {
 
     //push to tree
     for (const subTree of subTrees) {
-      if (subTree.rootIsFile) tree.addFile(subTree);
-      else tree.addFolder(subTree)
+      const itemName = subTree.rootName;
+      const itemPath = path.join(briefDir, itemName);
+      if (subTree.rootIsFile) tree.addFile(itemName,itemPath );
+      else tree.addFolder(subTree, itemPath)
     }
   }
 
@@ -42,25 +46,32 @@ const readdirRecursive = async (dir, options) => {
 //try catch
 const readdirShallow = async (dir, options) => {
 
-  if(!dir) throw new Error('dir is required');
+  if (!dir) throw new Error('dir is required');
   const curDirectoryStat = await pathStat(dir, options);
   const rootName = path.basename(dir);
+  const briefDir = options.s3 ? dir : dir.replace(rootFolderFs, '') // parameter dir
+  // dir = options.s3 ? dir : path.join(rootFolderFs, dir) //actual dir for calculation
+  
 
   //file
   if (curDirectoryStat.isFile()) {
-    return new FolderTree(rootName)
+    return new FolderTree(rootName);
   }
 
   //folder
   const items = await readDir(dir, options);
-  const tree = new FolderTree(rootName, false);
-  const stats = await Promise.all(items.map(i => pathStat(path.join(dir, i), options)));
+  const tree = new FolderTree(rootName, false, briefDir);
+  const stats = await Promise.all(
+    items.map(i => pathStat(path.join(dir, i), options))
+  );
 
   for (const i in stats) {
     const stat = stats[i];
     const addedItem = items[i];
-    if (stat.isFile()) tree.addFile(addedItem);
-    else tree.addFolder(addedItem)
+    const itemPath = path.join(briefDir, addedItem);
+
+    if (stat.isFile()) tree.addFile(addedItem, itemPath);
+    else tree.addFolder(addedItem, itemPath)
   }
 
   return tree;

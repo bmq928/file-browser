@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
 		"start":"export NODE_ENV=production && node ./src/index.js",
-    "dev": "nodemon ./src/index.js --ignore ./node_modules",
+    "dev": "export NODE_ENV=development && nodemon ./src/index.js",
     "test": " npm run lint && jest ./src",
     "clean": "rm -rf ./fileUpload",
     "lint": "eslint ./src"

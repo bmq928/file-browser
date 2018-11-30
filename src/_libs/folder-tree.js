@@ -1,17 +1,18 @@
 class FolderTree {
-  constructor(rootName, rootIsFile = false, files = [], folders = []) {
+  constructor(rootName, rootIsFile = false, path='/', files = [], folders = []) {
     this.rootIsFile = rootIsFile;
     this.rootName = rootName;
     this.files = files;
-    this.folders = folders
+    this.folders = folders;
+    this.path = path;
   }
 
-  addFile(file) {
-    this.files.push(file)
+  addFile(fileName, path) {
+    this.files.push(new FolderTree(fileName, true, path));
   }
 
-  addFolder(folder) {
-    this.folders.push(folder)
+  addFolder(folderName, path) {
+    this.folders.push(new FolderTree(folderName, false, path));
   }
 }
 
