@@ -14,6 +14,10 @@ const bufferToStream = buffer => {
   return stream
 };
 
+const bufferToBase64 = buffer => {
+  return buffer.toString('base64');
+}
+
 const withFs = filePath => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -21,13 +25,20 @@ const withFs = filePath => {
 
       if (stat.isDirectory()) throw new Error('This is directory');
 
-      const data = {
-        body: fs.createReadStream(filePath),
-        contentType: mime.getType(filePath),
-        name: path.basename(filePath)
-      };
+      fs.readFile(filePath, (err, buffer) => {
+        if(err) return reject(err);
 
-      resolve(data)
+        const data = {
+          body: fs.createReadStream(filePath),
+          contentType: mime.getType(filePath),
+          name: path.basename(filePath),
+          base64: bufferToBase64(buffer),
+          buffer: buffer
+        };
+
+        resolve(data)
+      })
+
     } catch (error) {
       reject(error)
     }
@@ -45,7 +56,9 @@ const withS3 = (bucket, filePath) => {
       const data = {
         name: path.basename(filePath),
         body: bufferToStream(Body),
-        contentType: ContentType
+        contentType: ContentType,
+        buffer: Body,
+        base64: bufferToBase64(Body)
       };
 
       resolve(data)

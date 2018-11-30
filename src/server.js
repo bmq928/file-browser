@@ -9,6 +9,7 @@ const swaggerDoc = require('../swagger.json');
 const fileExplore = require('./file-explore');
 const uploadFile = require('./upload-file');
 const downloadFile = require('./download-file');
+const readFile = require('./read-file');
 
 // dependency
 app.use(helmet());
@@ -21,5 +22,6 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 app.use('/file-explore', fileExplore.route);
 app.use('/upload', uploadFile.route);
 app.use('/download', downloadFile.route);
+app.use('/read-file', readFile.route);
 
 module.exports = app;

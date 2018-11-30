@@ -3,7 +3,7 @@ const { getFile } = require('../_file-sys');
 const download = (filePath, options, res) => {
   return new Promise(async (resolve, reject) => {
 
-    if (!filePath) return reject(Error('file_path is required'));
+    if (!filePath) return reject(new Error('file_path is required'));
 
     try {
 

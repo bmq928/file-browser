@@ -19,7 +19,7 @@ route.get('/recursive', async (req, res) => {
     
   } catch (error) {
     
-    res.status(404).json({ message: error.message })
+    res.status(400).json({ message: error.message })
   }
 });
 
@@ -31,8 +31,8 @@ route.get('/shallow', async (req, res) => {
     const data = await readdirShallow(dir, options);
     res.status(200).json({ data })
   } catch (error) {
-    console.log(error);
-    res.status(404).json({ message: error.message })
+    
+    res.status(400).json({ message: error.message })
   }
 });
 
