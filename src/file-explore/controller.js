@@ -17,7 +17,7 @@ const readdirRecursive = async (dir, options) => {
 
   if (curDirectoryStat.isFile()) {
 
-    tree.addFile(dir, true, briefDir);
+    // tree.addFile(dir, true, briefDir);
     tree.rootIsFile = true
   } else if (curDirectoryStat.isDirectory()) {
     const items = await readDir(dir, options);
