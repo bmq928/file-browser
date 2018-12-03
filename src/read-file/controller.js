@@ -6,8 +6,8 @@ const readFile = async (filePath, options) => {
 
     try {
 
-      const { base64, buffer } = await getFile(filePath, options)
-      resolve({ base64, buffer })
+      const { base64, buffer, utf8 } = await getFile(filePath, options)
+      resolve({ base64, buffer, utf8 })
 
     } catch (error) {
       reject(error)
