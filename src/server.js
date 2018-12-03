@@ -19,7 +19,7 @@ app.use(cors());
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 //api router
-app.use('/file-explore', fileExplore.route);
+app.use('/file-explorer', fileExplore.route);
 app.use('/upload', uploadFile.route);
 app.use('/download', downloadFile.route);
 app.use('/read-file', readFile.route);
