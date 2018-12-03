@@ -4,3 +4,4 @@ fileUpload
 /config/development.json
 /.idea/
 .vscode
+package-lock.json
