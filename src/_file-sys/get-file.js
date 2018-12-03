@@ -18,6 +18,10 @@ const bufferToBase64 = buffer => {
   return buffer.toString('base64');
 }
 
+const bufferToUtf8 = buffer => {
+  return buffer.toString('utf8')
+}
+
 const withFs = filePath => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -33,7 +37,8 @@ const withFs = filePath => {
           contentType: mime.getType(filePath),
           name: path.basename(filePath),
           base64: bufferToBase64(buffer),
-          buffer: buffer
+          buffer: buffer,
+          utf8: bufferToUtf8(buffer)
         };
 
         resolve(data)
@@ -58,7 +63,8 @@ const withS3 = (bucket, filePath) => {
         body: bufferToStream(Body),
         contentType: ContentType,
         buffer: Body,
-        base64: bufferToBase64(Body)
+        base64: bufferToBase64(Body),
+        utf8: bufferToUtf8(Body)
       };
 
       resolve(data)
