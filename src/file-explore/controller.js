@@ -72,6 +72,7 @@ const readdirShallow = async (dir, options) => {
 
   //folder
   const items = await readDir(dir, options);
+  
   const tree = new FolderTree(rootName, false, briefDir);
   const stats = await Promise.all(
     items.map(i => pathStat(path.join(dir, i), options))
