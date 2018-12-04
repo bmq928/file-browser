@@ -1,5 +1,5 @@
 // const { readDir, pathStat, FolderTree } = require('../utils')
-const { pathStat, readDir } = require('../_file-sys');
+const { pathStat, readDir, getPath } = require('../_file-sys');
 const { FolderTree } = require('../_libs');
 const path = require('path');
 const config = require('config');
@@ -7,7 +7,7 @@ const rootFolderFs = config.get('rootFolder');
 
 //should try catch when use this function
 //because it doesnt handle exception`
-const readdirRecursive = async (dir, options) => {
+const _readdirRecursive = async (dir, options) => {
 
   if (!dir) throw new Error('dir is required');
   const briefDir = options.s3 ? dir : dir.replace(rootFolderFs, '') // parameter dir
@@ -25,7 +25,7 @@ const readdirRecursive = async (dir, options) => {
     //recursive
     //readir in every item in folder
     const subTrees = await Promise.all(
-      items.map(item => readdirRecursive(path.join(dir, item), options))
+      items.map(item => _readdirRecursive(path.join(dir, item), options))
     );
 
     //push to tree
@@ -43,6 +43,12 @@ const readdirRecursive = async (dir, options) => {
   return tree;
 };
 
+const readdirRecursive = (dir, options) => {
+
+  dir = getPath(dir, rootFolderFs, options);
+  return _readdirRecursive(dir, options)
+}
+
 // readdirRecursive('folder', {s3:true, bucket: 'test-quang'})
 
 //unhandle case dir is not exist
@@ -50,6 +56,9 @@ const readdirRecursive = async (dir, options) => {
 const readdirShallow = async (dir, options) => {
 
   if (!dir) throw new Error('dir is required');
+  
+  dir = getPath(dir, rootFolderFs, options);
+
   const curDirectoryStat = await pathStat(dir, options);
   const rootName = path.basename(dir);
   const briefDir = options.s3 ? dir : dir.replace(rootFolderFs, '') // parameter dir
@@ -80,4 +89,7 @@ const readdirShallow = async (dir, options) => {
   return tree;
 };
 
-module.exports = { readdirRecursive, readdirShallow };
+module.exports = {
+  readdirRecursive,
+  readdirShallow
+};

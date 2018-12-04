@@ -1,6 +1,11 @@
-const { getFile } = require('../_file-sys');
+const config = require('config');
+const rootFolderFs = config.get('rootFolder');
+const { getFile, getPath } = require('../_file-sys');
 
 const readFile = async (filePath, options) => {
+
+  filePath = getPath(filePath, rootFolderFs, options);
+
   return new Promise(async (resolve, reject) => {
     if (!filePath) return reject(new Error('file_path is required'))
 

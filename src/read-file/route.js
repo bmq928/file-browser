@@ -1,16 +1,20 @@
 const route = require('express').Router();
-const path = require('path');
+// const path = require('path');
 const controller = require('./controller');
 const config = require('config');
-const rootFolderFs = config.get('rootFolder');
+// const rootFolderFs = config.get('rootFolder');
 const options = {
   s3: config.get('s3'),
   bucket: config.get('aws.bucket')
 };
 
 route.get('/', async (req, res) => {
-  let filePath = req.query.file_path;
-  if (!options.s3) filePath = path.join(rootFolderFs, filePath);
+  const filePath = req.query.file_path;
+  console.log({filePath})
+  // if (!options.s3) filePath = path.join(rootFolderFs, filePath);
+
+  // //s3 prefix doesn't start with /
+  // if (options.s3 && filePath.startsWith('/')) filePath = filePath.substr(1);
 
   try {
     const data = await controller.readFile(filePath, options);
