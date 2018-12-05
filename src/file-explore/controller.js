@@ -58,10 +58,10 @@ const readdirShallow = async (dir, options) => {
   if (!dir) throw new Error('dir is required');
   
   dir = getPath(dir, rootFolderFs, options);
-
   const curDirectoryStat = await pathStat(dir, options);
   const rootName = path.basename(dir);
   const briefDir = options.s3 ? dir : dir.replace(rootFolderFs, '') // parameter dir
+  console.log(briefDir);
   // dir = options.s3 ? dir : path.join(rootFolderFs, dir) //actual dir for calculation
 
 

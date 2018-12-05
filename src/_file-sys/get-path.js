@@ -6,7 +6,7 @@ const withFs = (itemPath, rootFolder) => {
 }
 
 const withS3 = (itemPath) => {
-  if ( itemPath.length > 1 && itemPath.startsWith('/')) return itemPath.substr(1);
+  // if ( itemPath.length > 1 && itemPath.startsWith('/')) return itemPath.substr(1);
 
   return itemPath;
 }
