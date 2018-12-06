@@ -25,12 +25,17 @@ const withS3 = (bucket, file, location = '') => {
   return new Promise(async (resolve, reject) => {
 
     try {
+
+      location = location === '/' ? '' : location
+
       const params = {
         Bucket: bucket,
-        // Key: path.join(location, file.originalname),
-        Key: location + '/' + file.originalname,
+        Key: path.join(location, file.originalname),
+        // Key: location + '/' + file.originalname,
         Body: file.buffer
       };
+
+      console.log({params})
 
       const data = await s3.upload(params).promise();
 

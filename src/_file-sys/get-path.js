@@ -15,6 +15,7 @@ module.exports = (itemPath, rootFolder, options) => {
   if(options && options.s3) {
 
     //remove redundant /
+    console.log(path.join(withS3(itemPath)))
     return path.join(withS3(itemPath))
   }
 

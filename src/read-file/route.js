@@ -10,7 +10,7 @@ const options = {
 
 route.get('/', async (req, res) => {
   const filePath = req.query.file_path;
-  console.log({filePath})
+  // console.log({filePath})
   // if (!options.s3) filePath = path.join(rootFolderFs, filePath);
 
   // //s3 prefix doesn't start with /
