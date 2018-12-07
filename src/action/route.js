@@ -23,9 +23,9 @@ route.get('/remove', async (req, res) => {
 
   try {
     const data = await controller.itemRemove(filePath, options);
-    res.status(200).json({data});
+    res.status(200).json({ data });
   } catch (error) {
-    console.log({error})
+    console.log({ error })
     res.status(400).json({ message: error.message })
   }
 
@@ -36,9 +36,20 @@ route.get('/move', async (req, res) => {
 
   try {
     const data = await controller.itemMove(from, dest, options);
+    res.status(200).json({ data });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+})
+
+route.get('/create-folder', async (req, res) => {
+  const { dest, name } = req.query;
+
+  try {
+    const data = await controller.folderCreate(name, dest, options);
     res.status(200).json({data});
-  } catch(error) {
-    res.status(400).json({message: error.message});
+  } catch (error) {
+    res.status(400).json({message: error.message})
   }
 })
 
