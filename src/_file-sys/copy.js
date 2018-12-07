@@ -16,7 +16,7 @@ const withFs = (from, dest) => {
 
 const withS3 = (bucket, from, dest) => {
   from = path.join(bucket, from)
-  dest = path.join(bucket, dest)
+  // dest = path.join(bucket, dest)
 
   return new Promise((resolve, reject) => {
     const params = {
