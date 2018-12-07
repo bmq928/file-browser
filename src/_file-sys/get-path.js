@@ -6,7 +6,7 @@ const withFs = (itemPath, rootFolder) => {
 }
 
 const withS3 = (itemPath) => {
-  // if ( itemPath.length > 1 && itemPath.startsWith('/')) return itemPath.substr(1);
+  if ( itemPath.length > 1 && itemPath.startsWith('/')) return itemPath.substr(1);
 
   return itemPath;
 }
@@ -14,9 +14,10 @@ const withS3 = (itemPath) => {
 module.exports = (itemPath, rootFolder, options) => {
   if(options && options.s3) {
 
+    
+    if(itemPath === '/') return '';
     //remove redundant /
-    console.log(path.join(withS3(itemPath)))
-    return path.join(withS3(itemPath))
+    return path.join(withS3(itemPath));
   }
 
   return withFs(itemPath, rootFolder);

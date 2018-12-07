@@ -5,7 +5,7 @@ const { upload, pathStat, getPath } = require('../_file-sys');
 const uploadToServer = (file,location, options) => {
 
   location = getPath(location, rootFolderFs, options);
-
+  // return Promise.resolve(location)
   return new Promise( async (resolve, reject) => {
     if(!file) return reject(new Error('file is required'));
     
