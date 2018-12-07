@@ -7,7 +7,7 @@
     "start": "export NODE_ENV=production && node ./src/index.js",
     "dev": "export NODE_ENV=development && nodemon ./src/index.js",
     "test": " npm run lint && jest ./src",
-    "clean": "rm -rf ./fileUpload",
+    "clean": "node rimraf",
     "lint": "eslint ./src"
   },
   "engines": {
@@ -29,6 +29,6 @@
     "eslint": "^5.8.0",
     "eslint-plugin-node": "^8.0.0",
     "jest": "^23.6.0",
-    "nodemon": "^1.18.5"
+    "rimraf": "^2.6.2"
   }
 }

@@ -6,11 +6,12 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDoc = require('../swagger.json');
 
 // expose module
-const fileExplore = require('./file-explore');
+const fileExplorer = require('./file-explorer');
 const uploadFile = require('./upload-file');
 const downloadFile = require('./download-file');
 const readFile = require('./read-file');
 const authenticate = require('./authenticate');
+const action = require('./action')
 
 // dependency
 app.use(helmet());
@@ -33,9 +34,10 @@ app.use((req, res, next) => {
 });
 
 //api router
-app.use('/file-explorer', fileExplore.route);
+app.use('/file-explorer', fileExplorer.route);
 app.use('/upload', uploadFile.route);
 app.use('/download', downloadFile.route);
 app.use('/read-file', readFile.route);
+app.use('/action', action.route);
 
 module.exports = app;
