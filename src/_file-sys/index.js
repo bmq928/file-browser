@@ -4,6 +4,7 @@ const getFile = require('./get-file');
 const upload = require('./upload');
 const getPath = require('./get-path');
 const copy = require('./copy');
+const remove = require('./remove');
 
 module.exports = {
   pathStat,
@@ -11,5 +12,6 @@ module.exports = {
   getFile,
   upload,
   getPath,
-  copy
+  copy,
+  remove
 };

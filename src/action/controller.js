@@ -1,4 +1,4 @@
-const {copy, getPath} = require('../_file-sys');
+const {copy, getPath, remove} = require('../_file-sys');
 const config = require('config');
 const rootFolderFs = config.get('rootFolder');
 
@@ -13,6 +13,26 @@ const itemCopy = async (from, dest, options) => {
   return data;
 }
 
+const itemRemove = async (filePath, options) => {
+
+  if(!filePath) throw new Error('filePath is required');
+
+  filePath = getPath(filePath, rootFolderFs, options);
+
+  const data = await remove(filePath, options);
+  return data;
+
+}
+
+const itemMove = async (from, dest, options) => {
+  const succCopy = await itemCopy(from, dest, options);
+  if(succCopy) await itemRemove(from, options);
+
+  return 'done'
+}
+
 module.exports = {
-  itemCopy
+  itemCopy,
+  itemRemove,
+  itemMove
 }
