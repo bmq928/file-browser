@@ -32,8 +32,8 @@ const _readdirRecursive = async (dir, options) => {
     for (const subTree of subTrees) {
       const itemName = subTree.rootName;
       const itemPath = path.join(briefDir, itemName);
-      const childFiles = subTree.files
-      const childFolders = subTree.folders
+      const childFiles = subTree.files;
+      const childFolders = subTree.folders;
 
       if (subTree.rootIsFile) tree.addFile(itemName, itemPath, childFiles, childFolders);
       else tree.addFolder(itemName, itemPath, childFiles, childFolders);
@@ -56,12 +56,11 @@ const readdirRecursive = (dir, options) => {
 const readdirShallow = async (dir, options) => {
 
   if (!dir) throw new Error('dir is required');
-  
+
   dir = getPath(dir, rootFolderFs, options);
   const curDirectoryStat = await pathStat(dir, options);
   const rootName = path.basename(dir);
   const briefDir = options.s3 ? dir : dir.replace(rootFolderFs, '') // parameter dir
-  console.log(briefDir);
   // dir = options.s3 ? dir : path.join(rootFolderFs, dir) //actual dir for calculation
 
 
@@ -72,7 +71,7 @@ const readdirShallow = async (dir, options) => {
 
   //folder
   const items = await readDir(dir, options);
-  
+
   const tree = new FolderTree(rootName, false, briefDir);
   const stats = await Promise.all(
     items.map(i => pathStat(path.join(dir, i), options))
@@ -82,9 +81,13 @@ const readdirShallow = async (dir, options) => {
     const stat = stats[i];
     const addedItem = items[i];
     const itemPath = path.join(briefDir, addedItem);
+    const size = stat.size;
+    const modifiedDate = stat.modifiedDate;
+    const childFiles = [];
+    const childFolders = [];
 
-    if (stat.isFile()) tree.addFile(addedItem, itemPath);
-    else tree.addFolder(addedItem, itemPath)
+    if (stat.isFile()) tree.addFile(addedItem, itemPath, childFiles, childFolders, size, modifiedDate);
+    else tree.addFolder(addedItem, itemPath, childFiles, childFolders, size, modifiedDate);
   }
 
   return tree;

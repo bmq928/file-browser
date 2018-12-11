@@ -6,10 +6,17 @@ const withFs = dir => {
 		fs.lstat(dir, (err, stat) => {
 			if (err) return reject(err);
 			
-			return resolve(stat)
+			// return resolve(stat)
+
+			return resolve({
+				isDirectory:() => stat.isDirectory(),
+				isFile:() => stat.isFile(),
+				size: stat.size,
+				LastModified: stat.mtime
+			})
 		})
 	})
-};
+};	
 
 const withS3 = (bucket, dir) => {
 	return new Promise(async (resolve, reject) => {
@@ -22,7 +29,7 @@ const withS3 = (bucket, dir) => {
 		
 		//default of s3 dont use / at start
 		//but in fs system use /
-		if (dir[0] === '/' || dir[0] === '\\') dir = dir.substr(1);
+		if (dir[0] === '/' || dir[0] === '//') dir = dir.substr(1);
 		
 		try {
 			const params = {Bucket: bucket};
@@ -36,44 +43,27 @@ const withS3 = (bucket, dir) => {
 			// to sync with version that using fs
 			// folder end with /
 			// file doesnt end with /
-			return resolve({
+			
+			const stat = {
 				isFile: () => {
 					return foundContent.Key[foundContent.Key.length - 1] !== '/'
 				},
 				isDirectory: () => {
 					return foundContent.Key[foundContent.Key.length - 1] === '/'
-				}
-			})
+				},
+				size: foundContent.Size,
+				modifiedDate: foundContent.LastModified
+			}
+
+			// calculate size
+			// because s3 treat folder as an empty object
+			// therefore folder will have 0kb size
+
+			return resolve(stat);
 			
 		} catch (error) {
 			reject(error)
 		}
-		
-		// s3.listObjects({
-		//   Bucket: bucket
-		// })
-		//   .promise()
-		//   .then(data => {
-		//     const foundContent = data.Contents.filter(
-		//       content => content.Key === dir || content.Key === dir + '/'
-		//     )[0]
-		
-		//     console.log({ dir, bucket })
-		//     if (!foundContent) return reject(new Error('Directory is not founded'))
-		
-		//     // to sync with version that using fs
-		//     // folder end with /
-		//     // file doesnt end with /
-		//     return resolve({
-		//       isFile: () => {
-		//         return foundContent.Key[foundContent.Key.length - 1] !== '/'
-		//       },
-		//       isDirectory: () => {
-		//         return foundContent.Key[foundContent.Key.length - 1] === '/'
-		//       }
-		//     })
-		//   })
-		//   .catch(err => reject(err))
 	})
 };
 
