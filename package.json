@@ -24,12 +24,12 @@
     "mime": "^2.3.1",
     "multer": "^1.4.1",
     "ncp": "^2.0.0",
+    "rimraf": "^2.6.2",
     "swagger-ui-express": "^4.0.1"
   },
   "devDependencies": {
     "eslint": "^5.8.0",
     "eslint-plugin-node": "^8.0.0",
-    "jest": "^23.6.0",
-    "rimraf": "^2.6.2"
+    "jest": "^23.6.0"
   }
 }
