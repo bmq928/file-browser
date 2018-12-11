@@ -1,3 +1,5 @@
+const config = require('config');
+
 class FolderTree {
   constructor(
     rootName,
@@ -17,6 +19,11 @@ class FolderTree {
     this.path = path;
     this.size = size;
     this.modifiedDate = modifiedDate;
+
+    //sync path s3 and fs
+    if(config.get('s3') && path.length && path[0] !== '/' ) {
+      this.path = '/' + path;
+    }
   }
 
   addFile(fileName, path, files = [], folders = [], size = 0, modifiedDate = 0) {
