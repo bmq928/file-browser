@@ -21,7 +21,7 @@ app.use(cors());
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 //authenticate
-// app.use(authenticate());
+app.use(authenticate());
 
 //monitoring
 app.use((req, res, next) => {

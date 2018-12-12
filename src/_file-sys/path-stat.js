@@ -30,7 +30,7 @@ const withS3 = (bucket, dir) => {
 		//default of s3 dont use / at start
 		//but in fs system use /
 		if (dir[0] === '/' || dir[0] === '//') dir = dir.substr(1);
-		
+		console.log(dir);
 		try {
 			const params = {Bucket: bucket};
 			const data = await s3.listObjects(params).promise();

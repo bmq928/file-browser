@@ -7,9 +7,11 @@ const options = {
   s3: config.get('s3'),
   bucket: config.get('aws.bucket')
 };
+const checking = require('../_checking');
 
 route.get('/', async (req, res) => {
-  const filePath = req.query.file_path;
+  let filePath = req.query.file_path;
+  filePath = await checking.validateUrl(filePath, req.decoded);
   // console.log({filePath})
   // if (!options.s3) filePath = path.join(rootFolderFs, filePath);
 
