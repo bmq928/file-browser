@@ -1,6 +1,6 @@
 const { s3 } = require('../_aws');
 const rimraf = require('rimraf');
-const { comparePathS3 } = require('../_checking');
+const { isPrefixS3 } = require('../_checking');
 
 // const withFs = (filePath) => {
 //   return new Promise((resolve, reject) => {
@@ -40,7 +40,7 @@ const withS3 = (bucket, itemPath) => {
       // filter content not right
       // e.x: /test and /test1
       // use api remove test => both test and test1 are removed
-      .filter(c => comparePathS3(c.Key, itemPath))
+      .filter(c => isPrefixS3(itemPath, c.Key))
       .map(c => ({ Key: c.Key }));
     const params = {
       Bucket: bucket,
