@@ -25,8 +25,8 @@ const itemRemove = async (filePath, options) => {
 }
 
 const itemMove = async (from, dest, options) => {
-  const succCopy = await itemCopy(from, dest, options);
-  if (succCopy) await itemRemove(from, options);
+  await itemCopy(from, dest, options);
+  await itemRemove(from, options);
 
   return 'done';
 }
