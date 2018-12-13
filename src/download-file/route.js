@@ -11,7 +11,7 @@ const options = {
 route.get('/', async (req, res) => {
 	
 	let filePath = req.query.file_path;
-	filePath = await checking.validateUrl(filePath, req.decoded);
+	// filePath = await checking.validateUrl(filePath, req.decoded);
 	// if(!options.s3) filePath = path.join(rootFolderFs, filePath);
 	
 	try {
