@@ -21,6 +21,7 @@ app.use(cors());
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 //authenticate
+app.use('/download', downloadFile.route);
 app.use(authenticate());
 
 //monitoring
@@ -36,7 +37,6 @@ app.use((req, res, next) => {
 //api router
 app.use('/file-explorer', fileExplorer.route);
 app.use('/upload', uploadFile.route);
-app.use('/download', downloadFile.route);
 app.use('/read-file', readFile.route);
 app.use('/action', action.route);
 
