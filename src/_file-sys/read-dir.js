@@ -16,15 +16,14 @@ const withS3 = (bucket, dir) => {
 
 
     try {
-
       const params = { Bucket: bucket, Prefix: dir };
       const data = await s3.listObjects(params).promise();
       const items = data.Contents
         .map(i => {
           //remove prefix with curent diretory
           // e.g: dir=folder, i = folder/item/abc => curItem = item/abc
-          const curItem = !dir ? i.Key.split(`${dir}/`)[0] : i.Key.split(`${dir}/`)[1];
-
+          let curItem = !dir ? i.Key.split(`${dir}/`)[0] : i.Key.split(`${dir}/`)[1];
+	  if(!curItem) curItem = "";
           // depth1Item = item
           const depth1Item = curItem.split('/')[0];
           return depth1Item
