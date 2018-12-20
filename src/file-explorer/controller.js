@@ -71,7 +71,6 @@ const readdirShallow = async (dir, options) => {
 
   //folder
   const items = await readDir(dir, options);
-
   const tree = new FolderTree(rootName, false, briefDir);
   const stats = await Promise.all(
     items.map(i => pathStat(path.join(dir, i), options))
@@ -83,11 +82,13 @@ const readdirShallow = async (dir, options) => {
     const itemPath = path.join(briefDir, addedItem);
     const size = stat.size;
     const modifiedDate = stat.modifiedDate;
+    const metaData = stat.metaData;
+    
     const childFiles = [];
     const childFolders = [];
-
-    if (stat.isFile()) tree.addFile(addedItem, itemPath, childFiles, childFolders, size, modifiedDate);
-    else tree.addFolder(addedItem, itemPath, childFiles, childFolders, size, modifiedDate);
+    
+    if (stat.isFile()) tree.addFile(addedItem, itemPath, childFiles, childFolders, size, modifiedDate, metaData);
+    else tree.addFolder(addedItem, itemPath, childFiles, childFolders, size, modifiedDate, metaData);
   }
 
   return tree;

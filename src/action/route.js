@@ -51,9 +51,10 @@ route.get('/create-folder', async (req, res) => {
 	// const {dest, name} = req.query;
 	let dest = req.query.dest;
 	let name = req.query.name;
+	let metaData = req.query.metaData ? JSON.parse(req.query.metaData) : {};
 	dest = await checking.validateUrl(dest, req.decoded);
 	try {
-		const data = await controller.folderCreate(name, dest, options);
+		const data = await controller.folderCreate(name, dest, options, metaData);
 		res.status(200).json({data});
 	} catch (error) {
 		res.status(400).json({message: error.message})
