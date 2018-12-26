@@ -6,6 +6,7 @@ const getPath = require('./get-path');
 const copy = require('./copy');
 const remove = require('./remove');
 const createFolder = require('./create-folder');
+const update = require('./update-meta-data');
 
 module.exports = {
   pathStat,
@@ -15,5 +16,6 @@ module.exports = {
   getPath,
   copy,
   remove,
-  createFolder
+  createFolder,
+  update
 };

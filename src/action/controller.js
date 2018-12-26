@@ -1,4 +1,4 @@
-const {copy, getPath, remove, createFolder} = require('../_file-sys');
+const {copy, getPath, remove, createFolder, update} = require('../_file-sys');
 const config = require('config');
 const rootFolderFs = config.get('rootFolder');
 
@@ -41,9 +41,15 @@ const folderCreate = async (name, dest, options, metaData) => {
 	return data;
 };
 
+const updateMetaData = async (key, options, metaData) => {
+	const data = await update(key, metaData, options);
+	return data;
+};
+
 module.exports = {
 	itemCopy: itemCopy,
 	itemRemove: itemRemove,
 	itemMove: itemMove,
-	folderCreate: folderCreate
+	folderCreate: folderCreate,
+	updateMetaData: updateMetaData
 };

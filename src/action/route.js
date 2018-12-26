@@ -1,6 +1,7 @@
 const route = require('express').Router();
 const controller = require('./controller');
 const config = require('config');
+const bodyParser = require('body-parser');
 const options = {
 	s3: config.get('s3'),
 	bucket: config.get('aws.bucket')
@@ -55,6 +56,17 @@ route.get('/create-folder', async (req, res) => {
 	dest = await checking.validateUrl(dest, req.decoded);
 	try {
 		const data = await controller.folderCreate(name, dest, options, metaData);
+		res.status(200).json({data});
+	} catch (error) {
+		res.status(400).json({message: error.message})
+	}
+});
+route.use(bodyParser.json());
+route.post('/update-meta-data', async (req, res) => {
+	let dest = req.body.key;
+	dest = await checking.validateUrl(dest, req.decoded);
+	try {
+		const data = await controller.updateMetaData(dest, options, req.body.metaData);
 		res.status(200).json({data});
 	} catch (error) {
 		res.status(400).json({message: error.message})
