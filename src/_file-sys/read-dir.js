@@ -23,7 +23,7 @@ const withS3 = (bucket, dir) => {
           //remove prefix with curent diretory
           // e.g: dir=folder, i = folder/item/abc => curItem = item/abc
           let curItem = !dir ? i.Key.split(`${dir}/`)[0] : i.Key.split(`${dir}/`)[1];
-	  if(!curItem) curItem = "";
+          if (!curItem) curItem = "";
           // depth1Item = item
           const depth1Item = curItem.split('/')[0];
           return depth1Item
