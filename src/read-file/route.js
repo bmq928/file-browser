@@ -5,7 +5,8 @@ const config = require('config');
 // const rootFolderFs = config.get('rootFolder');
 const options = {
   s3: config.get('s3'),
-  bucket: config.get('aws.bucket')
+  bucket: config.get('aws.bucket'),
+  maxSizeText: config.get('maxSizeText')
 };
 const checking = require('../_checking');
 

@@ -7,6 +7,5 @@ module.exports = {
 	checkuserRootDirectory,
 	comparePathS3,
 	validateUrl,
-	comparePathS3,
 	isPrefixS3
 };
