@@ -10,7 +10,7 @@ const readFile = async (filePath, options) => {
   return new Promise(async (resolve, reject) => {
     if (!filePath) return reject(new Error('file_path is required'))
 
-    const allowedExtRegex = /.(jpg|JPG|png|PNG|jpeg|JPEG|gif|GIF|bmp|BMP|svg|SVG|pdf)$/
+    const allowedExtRegex = /.(jpg|JPG|png|PNG|jpeg|JPEG|gif|GIF|bmp|BMP|svg|SVG|pdf|las)$/
 
     if (isBinarySync(filePath) && !allowedExtRegex.test(filePath))
       return resolve({ isReadable: false })
