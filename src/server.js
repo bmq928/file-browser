@@ -12,6 +12,7 @@ const downloadFile = require('./download-file');
 const readFile = require('./read-file');
 const authenticate = require('./authenticate');
 const action = require('./action')
+const search = require('./search')
 
 // dependency
 app.use(helmet());
@@ -22,7 +23,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 //authenticate
 app.use('/download', downloadFile.route);
-app.use(authenticate());
+// app.use(authenticate());
 
 //monitoring
 app.use((req, res, next) => {
@@ -39,5 +40,6 @@ app.use('/file-explorer', fileExplorer.route);
 app.use('/upload', uploadFile.route);
 app.use('/read-file', readFile.route);
 app.use('/action', action.route);
+app.use('/search', search.route);
 
 module.exports = app;

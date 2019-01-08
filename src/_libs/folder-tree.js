@@ -35,6 +35,15 @@ class FolderTree {
 	addFolder(folderName, path, files = [], folders = [], size = 0, modifiedDate = 0, metaData) {
 		this.folders.push(new FolderTree(folderName, false, path, files, folders, size, modifiedDate, metaData));
 	}
+
+	containMetaData(content) {
+
+		if(typeof this.metaData === 'string') 
+			return this.metaData === content
+
+		const metaDataVals = Object.values(this.metaData)
+		return !!metaDataVals.filter(val => val === content).length
+	}
 }
 
 module.exports = FolderTree;
