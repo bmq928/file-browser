@@ -1,6 +1,5 @@
 const config = require('config');
 const rootFolderFs = config.get('rootFolder');
-const path = require('path')
 const { getFile, getPath } = require('../_file-sys');
 const { isBinarySync } = require('istextorbinary')
 
@@ -10,7 +9,10 @@ const readFile = async (filePath, options) => {
 
   return new Promise(async (resolve, reject) => {
     if (!filePath) return reject(new Error('file_path is required'))
-    if (isBinarySync(filePath) && path.extname(filePath) !== '.pdf')
+
+    const allowedExtRegex = /.(jpg|JPG|png|PNG|jpeg|JPEG|gif|GIF|bmp|BMP|svg|SVG|pdf)$/
+
+    if (isBinarySync(filePath) && !allowedExtRegex.test(filePath))
       return resolve({ isReadable: false })
 
     try {
