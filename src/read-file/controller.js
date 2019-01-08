@@ -1,6 +1,8 @@
 const config = require('config');
 const rootFolderFs = config.get('rootFolder');
+const path = require('path')
 const { getFile, getPath } = require('../_file-sys');
+const { isBinary } = require('istextorbinary')
 
 const readFile = async (filePath, options) => {
 
@@ -8,11 +10,17 @@ const readFile = async (filePath, options) => {
 
   return new Promise(async (resolve, reject) => {
     if (!filePath) return reject(new Error('file_path is required'))
+    if (isBinary(filePath) && path.extname(filePath) !== '.pdf')
+      return resolve({ isBinary: true })
 
     try {
 
       const { base64, utf8 } = await getFile(filePath, options)
-      const data = { base64, utf8 }
+      const data = {
+        isBinary: false,
+        base64,
+        utf8
+      }
 
       if (options.maxSizeText) {
         const TEXT_LENGHT = options.maxSizeText * 1024
