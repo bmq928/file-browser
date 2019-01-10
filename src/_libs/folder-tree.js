@@ -1,4 +1,5 @@
 const config = require('config');
+const _ = require('lodash')
 
 class FolderTree {
 	constructor(
@@ -42,7 +43,9 @@ class FolderTree {
 			return this.metaData === content
 
 		const metaDataVals = Object.values(this.metaData)
-		return !!metaDataVals.filter(val => val.includes(content)).length
+		return !!metaDataVals.filter(
+			val => _.toLower(val).includes(_.toLower(content))
+		).length
 	}
 }
 

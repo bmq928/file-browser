@@ -1,4 +1,5 @@
 const { readdirShallow } = require('../file-explorer').controller
+const _ = require('lodash')
 
 const search = async (folder, content, options) => {
   if (!folder) throw new Error('folder is required')
@@ -15,7 +16,9 @@ const traverseTree = async (rootNode, content, options) => {
   let matchContent = []
 
   for (const f of [...files, ...folders]) {
-    if (f.containMetaData(content) || f.rootName.includes(content))
+    const fname = _.toLower(f.rootName)
+    const _content = _.toLower(content)
+    if (f.containMetaData(content) || fname.includes(_content))
       matchContent.push(f)
   }
 
