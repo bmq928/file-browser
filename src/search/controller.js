@@ -15,7 +15,7 @@ const traverseTree = async (rootNode, content, options) => {
   let matchContent = []
 
   for (const f of [...files, ...folders]) {
-    if (f.containMetaData(content) || f.rootName === content)
+    if (f.containMetaData(content) || f.rootName.includes(content))
       matchContent.push(f)
   }
 

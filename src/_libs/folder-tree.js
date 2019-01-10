@@ -42,7 +42,7 @@ class FolderTree {
 			return this.metaData === content
 
 		const metaDataVals = Object.values(this.metaData)
-		return !!metaDataVals.filter(val => val === content).length
+		return !!metaDataVals.filter(val => val.includes(content)).length
 	}
 }
 

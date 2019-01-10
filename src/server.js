@@ -23,7 +23,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 //authenticate
 app.use('/download', downloadFile.route);
-app.use(authenticate());
+// app.use(authenticate());
 
 //monitoring
 app.use((req, res, next) => {
