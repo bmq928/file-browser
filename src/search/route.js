@@ -1,6 +1,7 @@
 const route = require('express').Router()
 const controller = require('./controller')
 const config = require('config')
+const checking = require('../_checking')
 const options = {
   s3: config.get('s3'),
   bucket: config.get('aws.bucket'),
@@ -8,9 +9,10 @@ const options = {
 };
 
 route.get('/', async (req, res) => {
-  const { folder, content } = req.query
+  let { folder, content } = req.query
 
   try {
+    folder = await checking.validateUrl(folder, req.decoded)
     const data = await controller.search(folder, content, options)
     res.status(200).json({data});    
   } catch (error) {
