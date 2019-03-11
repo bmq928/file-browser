@@ -36,16 +36,21 @@ class FolderTree {
 	addFolder(folderName, path, files = [], folders = [], size = 0, modifiedDate = 0, metaData) {
 		this.folders.push(new FolderTree(folderName, false, path, files, folders, size, modifiedDate, metaData));
 	}
-
+	
 	containMetaData(content) {
-
-		if(typeof this.metaData === 'string') 
-			return this.metaData === content
-
-		const metaDataVals = Object.values(this.metaData)
-		return !!metaDataVals.filter(
-			val => _.toLower(val).includes(_.toLower(content))
-		).length
+		let result = true;
+		if (content.operator === 'and') {
+			result = true;
+			for (let _metaName in content.conditions) {
+				if (this.metaData[_metaName] !== content.conditions[_metaName]) result = false;
+			}
+		} else {
+			result = false;
+			for (let _metaName in content.conditions) {
+				if (this.metaData[_metaName] === content.conditions[_metaName]) result = true;
+			}
+		}
+		return result;
 	}
 }
 
