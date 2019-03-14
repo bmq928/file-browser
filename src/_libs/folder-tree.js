@@ -38,20 +38,22 @@ class FolderTree {
 	}
 	
 	containMetaData(content) {
-		let result = true;
-		if (content.operator === 'and') {
-			result = true;
-			for (let _metaName in content.conditions) {
-				if (this.metaData[_metaName] !== content.conditions[_metaName]) result = false;
-			}
-		} else {
-			result = false;
-			for (let _metaName in content.conditions) {
-				if (this.metaData[_metaName] === content.conditions[_metaName]) result = true;
-			}
-		}
-		return result;
+		return exploreTree(content.conditions, this.metaData, function (obj, meta) {
+			let key = Object.keys(obj)[0];
+			return obj[key] === meta[key];
+		});
 	}
 }
 
+function exploreTree(tree, metadata, compareFunc) {
+	if (tree.children && tree.children.length) {
+		if (tree.operator === "and") {
+			return !tree.children.some(c => !exploreTree(c, metadata, compareFunc))
+		} else {
+			return tree.children.some(c => exploreTree(c, metadata, compareFunc))
+		}
+	} else {
+		return compareFunc(tree, metadata);
+	}
+}
 module.exports = FolderTree;

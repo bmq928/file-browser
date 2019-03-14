@@ -1,17 +1,6 @@
 const {readdirShallow} = require('../file-explorer').controller;
 const _ = require('lodash');
-const testQuery = {
-	"folder": "/test_meta",
-	"content": {
-		"conditions": {
-			"x": "y"
-		},
-		"name": "1",
-		"type": "all",
-		"operator": "or",
-		"subFolders": "included"
-	}
-}
+
 const search = async (folder, content, options) => {
 	if (!folder) throw new Error('folder is required');
 	if (!content) throw new Error('content is required');
