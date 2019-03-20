@@ -60,10 +60,10 @@ const readdirShallow = async (dir, options) => {
   dir = getPath(dir, rootFolderFs, options);
   const curDirectoryStat = await pathStat(dir, options);
   const rootName = path.basename(dir);
-  const briefDir = options.s3 ? dir : dir.replace(rootFolderFs, '') // parameter dir
+  const briefDir = options.s3 ? dir : dir.replace(rootFolderFs, ''); // parameter dir
   // dir = options.s3 ? dir : path.join(rootFolderFs, dir) //actual dir for calculation
 
-
+  // console.log(curDirectoryStat);
   //file
   if (curDirectoryStat.isFile()) {
     return new FolderTree(rootName);

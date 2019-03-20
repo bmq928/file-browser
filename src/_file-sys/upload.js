@@ -1,6 +1,7 @@
 const {s3} = require('../_aws');
 const path = require('path');
 const fs = require('fs');
+const mqttClient = require('../utils/mqtt');
 // const Buffer = require('buffer')
 
 const withFs = (file, location = '') => {
@@ -36,12 +37,21 @@ const withS3 = (bucket, file, location = '', metaData) => {
 				Metadata: metaData
 			};
 			
-			console.log({params});
+			// console.log({params});
 			
-			const data = await s3.upload(params).promise();
-			
-			resolve(data);
-			
+			// const data = await s3.upload(params).promise();
+			// options: partSize > 5Mb (5 * 1024 * 1024)
+			s3.upload(params, {partSize: 5 * 1024 * 1024, queueSize: 2}, (err, data) => {
+				if (!err) resolve(data);
+			}).on('httpUploadProgress', event => {
+				let topic = "/upload/project_storage/".concat(metaData.uploaded, metaData.name);
+				console.log(`Uploaded ${event.loaded} out of ${event.total} || ${(event.loaded / event.total) * 100}`);
+				mqttClient.publish(topic, JSON.stringify({
+					loaded: event.loaded,
+					total: event.total,
+					progress: 100 * event.loaded / event.total
+				}), {qos: 2});
+			});
 		} catch (error) {
 			reject(error);
 		}
