@@ -11,8 +11,8 @@ const uploadFile = require('./upload-file');
 const downloadFile = require('./download-file');
 const readFile = require('./read-file');
 const authenticate = require('./authenticate');
-const action = require('./action')
-const search = require('./search')
+const action = require('./action');
+const search = require('./search');
 
 // dependency
 app.use(helmet());

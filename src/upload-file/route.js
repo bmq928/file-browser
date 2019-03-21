@@ -1,6 +1,6 @@
 const route = require('express').Router();
 const multer = require('multer');
-const controller = require('./controller');
+// const controller = require('./controller');
 const config = require('config');
 const multerS3 = require('multer-s3');
 const path = require('path');
@@ -33,31 +33,44 @@ const options = {
 
 //without streaming data to s3
 
-route.post('/old-method', async (req, res) => {
-	const file = req.file;
-	console.log(file);
-	let location = req.query.location;
-	let metaData = req.query.metaData ? JSON.parse(req.query.metaData) : {};
-	// location = req.decoded.company + '/' + req.decoded.dir + location;
-	location = await checking.validateUrl(location, req.decoded);
-	// if(!options.s3) location = path.join(rootFolderFs, location)
-	
-	
-	try {
-		// const data = await controller.uploadToServer(file, location, options, metaData);
-		controller.uploadToServer(file, location, options, metaData).then(data => {
-			console.log(data);
+// route.post('/old-method', async (req, res) => {
+// 	const file = req.file;
+// 	console.log(file);
+// 	let location = req.query.location;
+// 	let metaData = req.query.metaData ? JSON.parse(req.query.metaData) : {};
+// 	// location = req.decoded.company + '/' + req.decoded.dir + location;
+// 	location = await checking.validateUrl(location, req.decoded);
+// 	// if(!options.s3) location = path.join(rootFolderFs, location)
+//
+//
+// 	try {
+// 		// const data = await controller.uploadToServer(file, location, options, metaData);
+// 		controller.uploadToServer(file, location, options, metaData).then(data => {
+// 			console.log(data);
+// 		});
+// 		res.status(200).json({topic: "/upload/project_storage/".concat(metaData.uploaded, metaData.name)});
+// 	} catch (error) {
+// 		res.status(400).json({message: error.message})
+// 	}
+// });
+
+
+route.post('/', (req, res, next) => {
+	let objectLocation = JSON.parse(req.query.metaData).location;
+	checking.validateUrl(objectLocation, req.decoded).then(key => {
+		s3.headObject({
+			Bucket: config.aws.bucket,
+			Key: key
+		}, (err, metadata) => {
+			if ((err && err.code === "NotFound") || req.query.overwrite === "true") {
+				next();
+			} else {
+				res.status(409).json(metadata);
+			}
 		});
-		res.status(200).json({topic: "/upload/project_storage/".concat(metaData.uploaded, metaData.name)});
-	} catch (error) {
-		res.status(400).json({message: error.message})
-	}
-});
-
-
-route.post('/', upload.single('upload-file'), (req, res) => {
+	});
+}, upload.single('upload-file'), (req, res) => {
 	res.status(200).send(req.file);
 });
-// route.post('/', middleware.any())
 
 module.exports = route;
