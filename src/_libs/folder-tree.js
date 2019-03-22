@@ -40,7 +40,12 @@ class FolderTree {
 	containMetaData(content) {
 		return exploreTree(content.conditions, this.metaData, function (obj, meta) {
 			let key = Object.keys(obj)[0];
-			return obj[key] === meta[key];
+			if (key === 'name') {
+				// console.log(obj[key].toLowerCase(), meta[key].toLowerCase())
+				return (meta[key].toLowerCase()).includes(obj[key].toLowerCase());
+			} else {
+				return obj[key] === meta[key];
+			}
 		});
 	}
 }
@@ -56,4 +61,5 @@ function exploreTree(tree, metadata, compareFunc) {
 		return compareFunc(tree, metadata);
 	}
 }
+
 module.exports = FolderTree;
