@@ -56,21 +56,25 @@ const options = {
 
 
 route.post('/', (req, res, next) => {
+	next();
+}, upload.single('upload-file'), (req, res) => {
+	res.status(200).send(req.file);
+});
+
+route.get('/is-existed', (req, res) => {
 	let objectLocation = JSON.parse(req.query.metaData).location;
 	checking.validateUrl(objectLocation, req.decoded).then(key => {
 		s3.headObject({
 			Bucket: config.aws.bucket,
 			Key: key
 		}, (err, metadata) => {
-			if ((err && err.code === "NotFound") || req.query.overwrite === "true") {
-				next();
+			if (err && err.code === "NotFound") {
+				res.status(200).json({mess: "Not Found"});
 			} else {
-				res.status(409).json(metadata);
+				res.status(200).json({code: 409, metadata: metadata});
 			}
 		});
 	});
-}, upload.single('upload-file'), (req, res) => {
-	res.status(200).send(req.file);
 });
 
 module.exports = route;
