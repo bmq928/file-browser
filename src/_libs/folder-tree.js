@@ -42,7 +42,18 @@ class FolderTree {
 			let key = Object.keys(obj)[0];
 			// if (key === 'name') {
 			// console.log(obj[key].toLowerCase(), meta[key].toLowerCase())
-			return (meta[key].toLowerCase()).includes(obj[key].toLowerCase());
+			if (key === 'uploaded') {
+				console.log(meta[key]);
+				if (obj[key].from === obj[key].to) {
+					return (obj[key].from < +meta[key]) && (+meta[key] < (obj[key].from + 86400000));
+				} else if (obj[key].from < obj[key].to) {
+					return (obj[key].from < +meta[key]) && (+meta[key] < (obj[key].to + 86400000));
+				} else {
+					return false;
+				}
+			} else {
+				return (meta[key].toLowerCase()).includes(obj[key].toLowerCase());
+			}
 			// } else {
 			// 	return obj[key] === meta[key];
 			// }
