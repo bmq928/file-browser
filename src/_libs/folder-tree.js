@@ -42,8 +42,7 @@ class FolderTree {
 			let key = Object.keys(obj)[0];
 			// if (key === 'name') {
 			// console.log(obj[key].toLowerCase(), meta[key].toLowerCase())
-			if (key === 'uploaded') {
-				console.log(meta[key]);
+			if (key === 'uploaded' && meta[key]) {
 				if (obj[key].from === obj[key].to) {
 					return (obj[key].from < +meta[key]) && (+meta[key] < (obj[key].from + 86400000));
 				} else if (obj[key].from < obj[key].to) {
@@ -52,7 +51,7 @@ class FolderTree {
 					return false;
 				}
 			} else {
-				return (meta[key].toLowerCase()).search(obj[key].toLowerCase()) !== -1;
+				return meta[key] && ((meta[key].toLowerCase()).search(obj[key].toLowerCase()) !== -1);
 			}
 			// } else {
 			// 	return obj[key] === meta[key];
