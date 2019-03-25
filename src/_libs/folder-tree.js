@@ -51,7 +51,7 @@ class FolderTree {
 					return false;
 				}
 			} else {
-				return meta[key] && ((meta[key].toLowerCase()).search(obj[key].toLowerCase()) !== -1);
+				return meta[key] && ((meta[key].toLowerCase()).search(obj[key].toLowerCase().replace(/\?/g, ".?").replace(/\*/, ".*")) !== -1);
 			}
 			// } else {
 			// 	return obj[key] === meta[key];
