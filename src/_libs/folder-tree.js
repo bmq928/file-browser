@@ -52,7 +52,7 @@ class FolderTree {
 					return false;
 				}
 			} else {
-				return (meta[key].toLowerCase()).includes(obj[key].toLowerCase());
+				return (meta[key].toLowerCase()).search(obj[key].toLowerCase()) !== -1;
 			}
 			// } else {
 			// 	return obj[key] === meta[key];
