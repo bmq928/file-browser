@@ -23,7 +23,7 @@ class FolderTree {
 		this.size = size;
 		this.modifiedDate = modifiedDate;
 		this.metaData = metaData;
-		this.displayName = displayName;
+		this.displayName = displayName || rootName;
 		
 		//sync path s3 and fs
 		if (config.get('s3') && path.length && path[0] !== '/') {
