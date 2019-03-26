@@ -58,6 +58,12 @@ const options = {
 route.post('/', (req, res, next) => {
 	next();
 }, upload.single('upload-file'), (req, res) => {
+	// checking.validateUrl(req.query.location, req.decoded).then(key => {
+	// 	let updateObj = require('../_file-sys/update-object-hooks');
+	// 	updateObj(path.join(key, req.file.originalname)).then(r => {
+	// 		console.log("cb");
+	// 	})
+	// });
 	res.status(200).send(req.file);
 });
 
