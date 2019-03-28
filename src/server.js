@@ -26,14 +26,14 @@ app.use(cors());
 let serverId = getRandomHash();
 console.log("Server ID ", serverId);
 
-app.use('/', (req, res) => {
+app.get('/', (req, res) => {
 	res.send({serverId: serverId});
 });
 //document
 // app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 //authenticate
-app.use('/download', downloadFile.route);
+app.get('/download', downloadFile.route);
 const authenticate = require('./authenticate');
 app.use(authenticate());
 
