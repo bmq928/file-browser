@@ -17,7 +17,12 @@ const withFs = (name, dest) => {
 
 const withS3 = (bucket, name, dest, metaData) => {
 	const folder = path.join(dest, name) + '/'; //to make this it a folder
-	console.log(metaData);
+	metaData.encodingType = "base64";
+	for (let key in metaData) {
+		if (metaData.encodingType !== "base64") {
+			metaData[key] = (new Buffer(metaData[key], "utf8")).toString("base64");
+		}
+	}
 	return new Promise((resolve, reject) => {
 		const params = {
 			Key: folder,
