@@ -13,9 +13,9 @@ const upload = multer({
 		bucket: process.env.STORAGE_BUCKET || config.aws.bucket,
 		metadata: function (req, file, cb) {
 			let meta = req.query.metaData ? JSON.parse(req.query.metaData) : {};
-			meta.encodingType = "base64";
+			meta.encodingtype = "base64";
 			for (let key in meta) {
-				if (meta.encodingType !== "base64") {
+				if (key !== "encodingtype") {
 					meta[key] = (new Buffer(meta[key], 'utf8')).toString("base64");
 				}
 			}

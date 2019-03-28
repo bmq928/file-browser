@@ -2,9 +2,9 @@ const path = require('path');
 const {s3} = require('../_aws');
 const withS3 = (bucket, key, metaData) => {
 	return new Promise(async (resolve, reject) => {
-		if (metaData.encodingType === "base64") {
+		if (metaData.encodingtype === "base64") {
 			for (let key in metaData) {
-				if (metaData.encodingType !== "base64") {
+				if (key !== "encodingtype") {
 					metaData[key] = (new Buffer(metaData[key], "utf8")).toString("base64");
 				}
 			}
