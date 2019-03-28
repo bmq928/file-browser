@@ -15,9 +15,9 @@ function getRandomHash() {
 	return (crypto.createHash('sha1').update(current_date + random).digest('hex'));
 }
 
-app.get('/', (req, res) => {
-	res.send({serverId: serverId});
-});
+// app.get('/', (req, res) => {
+// 	res.send({serverId: serverId});
+// });
 
 // app.use(helmet());
 app.use(cors());
