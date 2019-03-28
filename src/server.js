@@ -16,7 +16,6 @@ const fileExplorer = require('./file-explorer');
 const uploadFile = require('./upload-file');
 const downloadFile = require('./download-file');
 const readFile = require('./read-file');
-const authenticate = require('./authenticate');
 const action = require('./action');
 const search = require('./search');
 
@@ -27,7 +26,7 @@ app.use(cors());
 let serverId = getRandomHash();
 console.log("Server ID ", serverId);
 
-app.get('/', (req, res) => {
+app.use('/', (req, res) => {
 	res.send({serverId: serverId});
 });
 //document
@@ -35,6 +34,7 @@ app.get('/', (req, res) => {
 
 //authenticate
 app.use('/download', downloadFile.route);
+const authenticate = require('./authenticate');
 app.use(authenticate());
 
 //monitoring
