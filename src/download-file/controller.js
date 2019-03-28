@@ -1,5 +1,5 @@
 const config = require('config');
-const rootFolderFs = config.get('rootFolder');
+const rootFolderFs = process.env.STORAGE_ROOT_FOLDER || config.get('rootFolder');
 const { getFile, getPath } = require('../_file-sys');
 
 const download = (filePath, options, res) => {

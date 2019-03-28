@@ -3,7 +3,7 @@ const {pathStat, readDir, getPath} = require('../_file-sys');
 const {FolderTree} = require('../_libs');
 const path = require('path');
 const config = require('config');
-const rootFolderFs = config.get('rootFolder');
+const rootFolderFs = process.env.STORAGE_ROOT_FOLDER || config.get('rootFolder');
 
 //should try catch when use this function
 //because it doesnt handle exception`

@@ -5,8 +5,8 @@ const checking = require('../_checking');
 // const path = require('path')
 // const rootFolderFs = config.get('rootFolder');
 const options = {
-	s3: config.get('s3'),
-	bucket: config.get('aws.bucket')
+	s3: process.env.STORAGE_S3 || config.get('s3'),
+	bucket: process.env.STORAGE_BUCKET || config.get('aws.bucket')
 };
 
 route.get('/recursive', async (req, res) => {

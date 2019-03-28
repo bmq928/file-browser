@@ -1,6 +1,6 @@
 const {copy, getPath, remove, createFolder, update} = require('../_file-sys');
 const config = require('config');
-const rootFolderFs = config.get('rootFolder');
+const rootFolderFs = process.env.STORAGE_ROOT_FOLDER || config.get('rootFolder');
 
 const itemCopy = async (from, dest, options) => {
 	if (!from) throw new Error('from is required');

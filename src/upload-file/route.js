@@ -11,7 +11,7 @@ const checking = require('../_checking');
 const upload = multer({
 	storage: multerS3({
 		s3: s3,
-		bucket: config.aws.bucket,
+		bucket: process.env.STORAGE_BUCKET || config.aws.bucket,
 		metadata: function (req, file, cb) {
 			cb(null, req.query.metaData ? JSON.parse(req.query.metaData) : {});
 		},
@@ -27,8 +27,8 @@ const upload = multer({
 // const path = require('path')
 // const rootFolderFs = config.get('rootFolder');
 const options = {
-	s3: config.get('s3'),
-	bucket: config.get('aws.bucket')
+	s3: process.env.STORAGE_S3 || config.get('s3'),
+	bucket: process.env.STORAGE_BUCKET || config.get('aws.bucket')
 };
 
 //without streaming data to s3
@@ -71,7 +71,7 @@ route.get('/is-existed', (req, res) => {
 	let objectLocation = JSON.parse(req.query.metaData).location;
 	checking.validateUrl(objectLocation, req.decoded).then(key => {
 		s3.headObject({
-			Bucket: config.aws.bucket,
+			Bucket: process.env.STORAGE_BUCKET || config.aws.bucket,
 			Key: key
 		}, (err, metadata) => {
 			if (err && err.code === "NotFound") {

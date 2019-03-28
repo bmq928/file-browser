@@ -26,7 +26,7 @@ class FolderTree {
 		this.displayName = displayName || rootName;
 		
 		//sync path s3 and fs
-		if (config.get('s3') && path.length && path[0] !== '/') {
+		if ((process.env.STORAGE_S3 || config.get('s3')) && path.length && path[0] !== '/') {
 			this.path = '/' + path;
 		}
 	}

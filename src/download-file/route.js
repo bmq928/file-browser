@@ -4,8 +4,8 @@ const controller = require('./controller');
 const config = require('config');
 // const rootFolderFs = config.get('rootFolder');
 const options = {
-	s3: config.get('s3'),
-	bucket: config.get('aws.bucket')
+	s3: process.env.STORAGE_S3 || config.get('s3'),
+	bucket: process.env.STORAGE_BUCKET || config.get('aws.bucket')
 };
 
 route.get('/', async (req, res) => {

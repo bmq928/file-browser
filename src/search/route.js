@@ -4,9 +4,9 @@ const config = require('config');
 const checking = require('../_checking');
 const bodyParser = require('body-parser');
 const options = {
-	s3: config.get('s3'),
-	bucket: config.get('aws.bucket'),
-	maxSizeText: config.get('maxSizeText')
+	s3: process.env.STORAGE_S3 || config.get('s3'),
+	bucket: process.env.STORAGE_BUCKET || config.get('aws.bucket'),
+	maxSizeText: process.env.STORAGE_MAXSIZE_TEXT || config.get('maxSizeText')
 };
 route.use(bodyParser.json());
 route.get('/', async (req, res) => {

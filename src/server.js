@@ -2,8 +2,14 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const app = express();
-const swaggerUi = require('swagger-ui-express');
-const swaggerDoc = require('../swagger.json');
+const crypto = require('crypto');
+function getRandomHash() {
+	const current_date = (new Date()).valueOf().toString();
+	const random = Math.random().toString();
+	return (crypto.createHash('sha1').update(current_date + random).digest('hex'));
+}
+// const swaggerUi = require('swagger-ui-express');
+// const swaggerDoc = require('../swagger.json');
 
 // expose module
 const fileExplorer = require('./file-explorer');
@@ -18,8 +24,14 @@ const search = require('./search');
 app.use(helmet());
 app.use(cors());
 
+let serverId = getRandomHash();
+console.log("Server ID ", serverId);
+
+app.get('/', (req, res) => {
+	res.send({serverId: serverId});
+});
 //document
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+// app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 //authenticate
 app.use('/download', downloadFile.route);
