@@ -3,6 +3,11 @@ const helmet = require('helmet');
 const cors = require('cors');
 const app = express();
 const crypto = require('crypto');
+const serverId = getRandomHash();
+
+console.log("Server ID ", serverId);
+
+const authenticate = require('./authenticate');
 
 function getRandomHash() {
 	const current_date = (new Date()).valueOf().toString();
@@ -10,8 +15,12 @@ function getRandomHash() {
 	return (crypto.createHash('sha1').update(current_date + random).digest('hex'));
 }
 
-// const swaggerUi = require('swagger-ui-express');
-// const swaggerDoc = require('../swagger.json');
+app.get('/', (req, res) => {
+	res.send({serverId: serverId});
+});
+
+// app.use(helmet());
+app.use(cors());
 
 // expose module
 const fileExplorer = require('./file-explorer');
@@ -21,23 +30,7 @@ const readFile = require('./read-file');
 const action = require('./action');
 const search = require('./search');
 
-app.get('/', (req, res) => {
-	res.send({serverId: serverId});
-});
 app.get('/download', downloadFile.route);
-
-// dependency
-app.use(helmet());
-app.use(cors());
-
-let serverId = getRandomHash();
-console.log("Server ID ", serverId);
-
-//document
-// app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
-
-//authenticate
-const authenticate = require('./authenticate');
 app.use(authenticate());
 
 //monitoring
