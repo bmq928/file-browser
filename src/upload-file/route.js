@@ -15,8 +15,9 @@ const upload = multer({
 			let meta = req.query.metaData ? JSON.parse(req.query.metaData) : {};
 			meta.encodingType = "base64";
 			for (let key in meta) {
-				meta[key] = (new Buffer(meta[key], 'utf8')).toString("base64");
-				// console.log(meta[key]);
+				if (metaData.encodingType !== "base64") {
+					meta[key] = (new Buffer(meta[key], 'utf8')).toString("base64");
+				}
 			}
 			cb(null, meta);
 		},

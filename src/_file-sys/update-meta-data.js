@@ -4,7 +4,9 @@ const withS3 = (bucket, key, metaData) => {
 	return new Promise(async (resolve, reject) => {
 		if (metaData.encodingType === "base64") {
 			for (let key in metaData) {
-				metaData[key] = (new Buffer(metaData[key], "utf8")).toString("base64");
+				if (metaData.encodingType !== "base64") {
+					metaData[key] = (new Buffer(metaData[key], "utf8")).toString("base64");
+				}
 			}
 		}
 		const params = {

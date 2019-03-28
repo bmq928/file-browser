@@ -46,7 +46,9 @@ const withS3 = (bucket, dir) => {
 			let metaData = (await s3.headObject({Bucket: bucket, Key: foundContent.Key}).promise()).Metadata;
 			if (metaData.encodingType === "base64") {
 				for (let key in metaData) {
-					metaData[key] = (new Buffer(metaData[key], 'base64')).toString("utf8");
+					if (metaData.encodingType !== "base64") {
+						metaData[key] = (new Buffer(metaData[key], 'base64')).toString("utf8");
+					}
 				}
 			}
 			const stat = {
