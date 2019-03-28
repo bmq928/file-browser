@@ -7,13 +7,17 @@ const path = require('path');
 const s3 = require('../_aws').s3;
 const checking = require('../_checking');
 
-
 const upload = multer({
 	storage: multerS3({
 		s3: s3,
 		bucket: process.env.STORAGE_BUCKET || config.aws.bucket,
 		metadata: function (req, file, cb) {
-			cb(null, req.query.metaData ? JSON.parse(req.query.metaData) : {});
+			let meta = req.query.metaData ? JSON.parse(req.query.metaData) : {};
+			for (let key in meta) {
+				meta[key] = (new Buffer(meta[key], 'utf8')).toString("base64");
+				// console.log(meta[key]);
+			}
+			cb(null, meta);
 		},
 		key: function (req, file, cb) {
 			checking.validateUrl(req.query.location, req.decoded).then(location => {

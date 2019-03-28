@@ -2,6 +2,11 @@ const path = require('path');
 const {s3} = require('../_aws');
 const withS3 = (bucket, key, metaData) => {
 	return new Promise(async (resolve, reject) => {
+		for (let key in metaData) {
+			console.log(metaData[key]);
+			metaData[key] = (new Buffer(metaData[key], "utf8")).toString("base64");
+			console.log(metaData[key]);
+		}
 		const params = {
 			Bucket: bucket,
 			CopySource: path.join(bucket, key),

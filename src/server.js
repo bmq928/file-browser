@@ -44,7 +44,7 @@ app.use((req, res, next) => {
 });
 
 //api router
-app.get('/download', authenticate(), downloadFile.route);
+app.use('/download', authenticate(), downloadFile.route);
 app.use('/file-explorer', authenticate(), fileExplorer.route);
 app.use('/upload', authenticate(), uploadFile.route);
 app.use('/read-file', authenticate(), readFile.route);

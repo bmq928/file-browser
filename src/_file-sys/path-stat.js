@@ -43,7 +43,10 @@ const withS3 = (bucket, dir) => {
 			// to sync with version that using fs
 			// folder end with /
 			// file doesnt end with /
-			const metaData = (await s3.headObject({Bucket: bucket, Key: foundContent.Key}).promise()).Metadata;
+			let metaData = (await s3.headObject({Bucket: bucket, Key: foundContent.Key}).promise()).Metadata;
+			for (let key in metaData) {
+				metaData[key] = (new Buffer(metaData[key], 'base64')).toString("utf8");
+			}
 			const stat = {
 				isFile: () => {
 					return foundContent.Key[foundContent.Key.length - 1] !== '/'
