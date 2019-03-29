@@ -34,11 +34,19 @@ const withS3 = (bucket, dir) => {
 		try {
 			const params = {Bucket: bucket, Prefix: dir};
 			const data = await s3.listObjects(params).promise();
+			// console.log(data.Contents);
+			// console.log(dir);
 			const foundContent = data.Contents.filter(
-				content => content.Key === dir || content.Key === dir + '/'
+				content => {
+					// console.log(content.Key, "||", dir, "||", content.Key === dir + '/');
+					let rs = content.Key === dir || content.Key === dir + '/';
+					return rs
+				}
 			)[0];
-			
-			if (!foundContent) return reject(new Error('Directory is not founded'));
+			// console.log("=======", !foundContent);
+			// console.log(foundContent);
+			// if (!foundContent) return reject(new Error('Directory is not founded'));
+			if (!foundContent) return resolve(null);
 			// console.log("===", foundContent);
 			// to sync with version that using fs
 			// folder end with /

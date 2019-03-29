@@ -63,32 +63,35 @@ const readdirShallow = async (dir, options) => {
 	const briefDir = options.s3 ? dir : dir.replace(rootFolderFs, ''); // parameter dir
 	// dir = options.s3 ? dir : path.join(rootFolderFs, dir) //actual dir for calculation
 	
-	// console.log(curDirectoryStat);
+	// console.log("++", curDirectoryStat);
 	//file
-	if (curDirectoryStat.isFile()) {
-		return new FolderTree(rootName);
-	}
+	// if (curDirectoryStat.isFile()) {
+	// 	return new FolderTree(rootName);
+	// }
 	
 	//folder
 	const items = await readDir(dir, options);
 	const tree = new FolderTree(rootName, false, briefDir);
+	// console.log("++", items);
 	const stats = await Promise.all(
 		items.map(i => pathStat(path.join(dir, i), options))
 	);
 	
 	for (const i in stats) {
-		const stat = stats[i];
-		const addedItem = items[i];
-		const itemPath = path.join(briefDir, addedItem);
-		const size = stat.size;
-		const modifiedDate = stat.modifiedDate;
-		const metaData = stat.metaData;
-		
-		const childFiles = [];
-		const childFolders = [];
-		
-		if (stat.isFile()) tree.addFile(addedItem, metaData.name, itemPath, childFiles, childFolders, size, modifiedDate, metaData);
-		else tree.addFolder(addedItem, metaData.name, itemPath, childFiles, childFolders, size, modifiedDate, metaData);
+		if (stats[i]) {
+			const stat = stats[i];
+			const addedItem = items[i];
+			const itemPath = path.join(briefDir, addedItem);
+			const size = stat.size;
+			const modifiedDate = stat.modifiedDate;
+			const metaData = stat.metaData;
+			
+			const childFiles = [];
+			const childFolders = [];
+			
+			if (stat.isFile()) tree.addFile(addedItem, metaData.name, itemPath, childFiles, childFolders, size, modifiedDate, metaData);
+			else tree.addFolder(addedItem, metaData.name, itemPath, childFiles, childFolders, size, modifiedDate, metaData);
+		}
 	}
 	
 	return tree;
