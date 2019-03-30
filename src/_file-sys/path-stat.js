@@ -33,17 +33,21 @@ const withS3 = (bucket, dir) => {
 		if (dir[0] === '/' || dir[0] === '//') dir = dir.substr(1);
 		try {
 			const params = {Bucket: bucket, Prefix: dir};
-			const data = await s3.listObjects(params).promise();
+			// console.log(params);
+			const data = await s3.listObjectsV2(params).promise();
 			// console.log(data.Contents);
 			// console.log(dir);
-			const foundContent = data.Contents.filter(
+			const foundContent = data.Contents.find(
 				content => {
 					// console.log(content.Key, "||", dir, "||", content.Key === dir + '/');
-					let rs = content.Key === dir || content.Key === dir + '/';
+					// let rs = content.Key === dir || content.Key === dir + '/';
+					// loi khi thu muc khong co file con
+					let rs = content.Key.includes(dir) || content.Key.includes(dir + '/');
 					return rs
 				}
-			)[0];
-			// console.log("=======", !foundContent);
+			);
+			// foundContent.Key = dir + '/';
+			// console.log("=======", !foundContent, foundContent);
 			// console.log(foundContent);
 			// if (!foundContent) return reject(new Error('Directory is not founded'));
 			if (!foundContent) return resolve(null);

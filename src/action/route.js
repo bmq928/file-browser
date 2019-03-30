@@ -2,6 +2,8 @@ const route = require('express').Router();
 const controller = require('./controller');
 const config = require('config');
 const bodyParser = require('body-parser');
+const _ = require("lodash");
+const s3 = require('../_aws').s3;
 const options = {
 	s3: process.env.STORAGE_S3 || config.get('s3'),
 	bucket: process.env.STORAGE_BUCKET || config.get('aws.bucket')
@@ -55,12 +57,46 @@ route.get('/create-folder', async (req, res) => {
 	let metaData = req.query.metaData ? JSON.parse(req.query.metaData) : {};
 	dest = await checking.validateUrl(dest, req.decoded);
 	try {
-		const data = await controller.folderCreate(name, dest, options, metaData);
+		let names = req.query.dest.substring(1).split('/');
+		let l = names.length;
+		let data = [];
+		for (let i = 1; i <= l; i++) {
+			let folder = _.take(names, i);
+			let folderName = folder.pop();
+			let folderMeta = {...metaData};
+			folderMeta.name = folderName;
+			folderMeta.location = '/' + _.take(names, i).join('/');
+			let folderCreateLocation = await checking.validateUrl(folderMeta.location.substring(0, folderMeta.location.lastIndexOf('/')), req.decoded);
+			let isExisted = await checkObjExisted(folderCreateLocation + '/' + folderName);
+			if (!isExisted && folderMeta.location !== "/") {
+				// console.log("Create ", folderName, "===", folderCreateLocation, "++", folderMeta);
+				data.push(await controller.folderCreate(folderName, folderCreateLocation, options, folderMeta));
+			}
+		}
+		data.push(await controller.folderCreate(name, dest, options, metaData));
 		res.status(200).json({data});
 	} catch (error) {
 		res.status(400).json({message: error.message})
 	}
 });
+
+function checkObjExisted(key) {
+	return new Promise(resolve => {
+		s3.headObject({
+			Bucket: process.env.STORAGE_BUCKET || config.aws.bucket,
+			Key: key + '/'
+		}).promise().then(rs => {
+			if (rs) {
+				resolve(true);
+			} else {
+				resolve(false);
+			}
+		}).catch(err => {
+			resolve(false);
+		});
+	})
+}
+
 route.use(bodyParser.json());
 route.post('/update-meta-data', async (req, res) => {
 	let dest = req.body.key;

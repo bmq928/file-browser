@@ -15,7 +15,8 @@ const withFs = (name, dest) => {
 	})
 }
 
-const withS3 = (bucket, name, dest, metaData) => {
+const withS3 = (bucket, name, dest, myMetaData) => {
+	let metaData = {...myMetaData};
 	const folder = path.join(dest, name) + '/'; //to make this it a folder
 	metaData.encodingtype = "base64";
 	for (let key in metaData) {
