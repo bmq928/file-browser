@@ -24,6 +24,7 @@ class FolderTree {
 		this.modifiedDate = modifiedDate;
 		this.metaData = metaData;
 		this.displayName = displayName || rootName;
+		this.datatype = metaData ? metaData.datatype || "Unknown";
 		
 		//sync path s3 and fs
 		if ((process.env.STORAGE_S3 || config.get('s3')) && path.length && path[0] !== '/') {
