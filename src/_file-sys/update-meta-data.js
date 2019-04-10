@@ -14,28 +14,28 @@ const withS3 = (options, key, metaData) => {
 						Prefix: key.substring(1, key.length),
 						Bucket: options.bucket
 					}).promise();
-					const allDonePromise = allContents.Contents.map(content => new Promise(async (resolve, reject) => {
+					const allDonePromise = allContents.Contents.map(content => new Promise(async (rl, rj) => {
 						const parmas = {
 							Bucket: options.bucket,
 							CopySource: path.join(options.bucket, content.Key),
 							Key: content.Key.replace(key.substring(1, key.length), newKey).substring(1)
 						};
 						try {
-							let data = await s3.copyObject(parmas).promise();
+							await s3.copyObject(parmas).promise();
 							let deletePrams = {
 								Bucket: options.bucket,
 								Key: content.Key
 							};
 							// console.log(deletePrams);
 							await s3.deleteObject(deletePrams).promise();
-							resolve(data);
+							rl();
 						} catch (error) {
-							reject(error);
+							rj(error);
 						}
 					}));
 					
 					await Promise.all(allDonePromise);
-					resolve()
+					resolve();
 					
 				} catch (error) {
 					reject(error)
