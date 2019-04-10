@@ -64,6 +64,10 @@ const withS3 = (bucket, dir) => {
 					}
 				}
 			}
+			let secondSlash = dir.indexOf("/", dir.indexOf("/") + 1);
+			// console.log(secondSlash);
+			// console.log(dir);
+			metaData.location = dir.substring(secondSlash);
 			const stat = {
 				isFile: () => {
 					return foundContent.Key[foundContent.Key.length - 1] !== '/'

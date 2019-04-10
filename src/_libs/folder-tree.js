@@ -1,10 +1,9 @@
 const config = require('config');
-const _ = require('lodash')
+const _ = require('lodash');
 
 class FolderTree {
 	constructor(
 		rootName,
-		displayName,
 		rootIsFile = false,
 		path = '/',
 		files = [],
@@ -14,7 +13,7 @@ class FolderTree {
 		metaData = '',
 	) {
 		
-		
+		let self = this;
 		this.rootIsFile = rootIsFile;
 		this.rootName = rootName;
 		this.files = files;
@@ -23,8 +22,11 @@ class FolderTree {
 		this.size = size;
 		this.modifiedDate = modifiedDate;
 		this.metaData = metaData;
-		this.displayName = displayName || rootName;
+		// this.displayName = displayName || rootName;
 		this.datatype = metaData ? metaData.datatype : "Unknown";
+		if (metaData) {
+			self.metaData.name = rootName;
+		}
 		
 		//sync path s3 and fs
 		if ((process.env.STORAGE_S3 || config.get('s3')) && path.length && path[0] !== '/') {
@@ -32,12 +34,12 @@ class FolderTree {
 		}
 	}
 	
-	addFile(fileName, displayName, path, files = [], folders = [], size = 0, modifiedDate = 0, metaData) {
-		this.files.push(new FolderTree(fileName, displayName, true, path, files, folders, size, modifiedDate, metaData));
+	addFile(fileName, path, files = [], folders = [], size = 0, modifiedDate = 0, metaData) {
+		this.files.push(new FolderTree(fileName, true, path, files, folders, size, modifiedDate, metaData));
 	}
 	
-	addFolder(folderName, displayName, path, files = [], folders = [], size = 0, modifiedDate = 0, metaData) {
-		this.folders.push(new FolderTree(folderName, displayName, false, path, files, folders, size, modifiedDate, metaData));
+	addFolder(folderName, path, files = [], folders = [], size = 0, modifiedDate = 0, metaData) {
+		this.folders.push(new FolderTree(folderName, false, path, files, folders, size, modifiedDate, metaData));
 	}
 	
 	containMetaData(content) {

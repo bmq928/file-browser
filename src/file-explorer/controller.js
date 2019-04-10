@@ -88,8 +88,8 @@ const readdirShallow = async (dir, options) => {
 			const childFiles = [];
 			const childFolders = [];
 			
-			if (stat.isFile()) tree.addFile(addedItem, metaData.name, itemPath, childFiles, childFolders, size, modifiedDate, metaData);
-			else tree.addFolder(addedItem, metaData.name, itemPath, childFiles, childFolders, size, modifiedDate, metaData);
+			if (stat.isFile()) tree.addFile(addedItem, itemPath, childFiles, childFolders, size, modifiedDate, metaData);
+			else tree.addFolder(addedItem, itemPath, childFiles, childFolders, size, modifiedDate, metaData);
 		}
 	}
 	
