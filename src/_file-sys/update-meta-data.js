@@ -21,7 +21,13 @@ const withS3 = (options, key, metaData) => {
 							Key: content.Key.replace(key.substring(1, key.length), newKey).substring(1)
 						};
 						try {
-							const data = await s3.copyObject(parmas).promise();
+							let data = await s3.copyObject(parmas).promise();
+							let deletePrams = {
+								Bucket: options.bucket,
+								Key: content.Key
+							};
+							// console.log(deletePrams);
+							await s3.deleteObject(deletePrams).promise();
 							resolve(data);
 						} catch (error) {
 							reject(error);
