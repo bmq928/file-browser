@@ -4,7 +4,9 @@ const pathStat = require('./path-stat');
 const readdir = require('./read-dir')
 const {ncp} = require('ncp');
 const {s3} = require('../_aws');
-const _ = require('lodash')
+const _ = require('lodash');
+
+const COPY_NOTATION = '-COPY-';
 
 //copy file
 const withFsFile = (from, dest) => {
@@ -46,27 +48,32 @@ const withFs = (from, dest) => {
 const withS3 = (bucket, from, dest) => {
 	return new Promise(async (resolve, reject) => {
 		try {
-			const allContents = await s3.listObjects({Prefix: from, Bucket: bucket}).promise();
-			const allDonePromise = allContents.Contents.map(content => new Promise(async (resolve, reject) => {
-				const parmas = {
+			const s3Response = await s3.listObjects({Prefix: from, Bucket: bucket}).promise();
+			const regex = new RegExp(`^(${from})(${COPY_NOTATION})`, 'g')
+			const allContents = s3Response.Contents.filter(
+				content => !content.Key.match(regex)
+			);
+			const copyActionPromises = allContents.map(content => new Promise(async (resolve, reject) => {
+				const param = {
 					Bucket: bucket,
 					CopySource: path.join(bucket, content.Key),
 					Key: content.Key.replace(from, dest)
 				}
-				
+
 				try {
-					const data = await s3.copyObject(parmas).promise();
+					const data = await s3.copyObject(param).promise();
 					resolve(data);
 				} catch (error) {
 					reject(error);
 				}
 			}))
+
 			
-			await Promise.all(allDonePromise);
-			resolve()
+			await Promise.all(copyActionPromises);
+			resolve();
 			
 		} catch (error) {
-			reject(error)
+			reject(error);
 		}
 	});
 }
@@ -75,7 +82,6 @@ const avoidDuplicateCopySrc = (src, destItems) => {
 	const extSrc = path.extname(src);
 	const fileNameSrc = path.basename(src, extSrc);
 	const prefixSrc = path.dirname(src);
-	const COPY_NOTATION = '-COPY-';
 	const regex = new RegExp(`^(${fileNameSrc})(${COPY_NOTATION})*`, 'g');
 	const similarItems = destItems.filter(i => i.match(regex));
 	if (!similarItems.length) return src;
