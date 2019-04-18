@@ -9,8 +9,7 @@ const _ = require('lodash')
 //copy file
 const withFsFile = (from, dest) => {
 	return new Promise((resolve, reject) => {
-		fs
-			.createReadStream(from)
+		fs.createReadStream(from)
 			.pipe(fs.createWriteStream(dest))
 			.on('finish', () => resolve('done'))
 			.on('error', (error) => reject(error))
@@ -45,14 +44,7 @@ const withFs = (from, dest) => {
 // withFs('/home/bui/Desktop/test/optimize-request.txt', '/home/bui/Desktop/test/inner/optimize-request.txt')
 
 const withS3 = (bucket, from, dest) => {
-	
 	return new Promise(async (resolve, reject) => {
-		// const params = {
-		//   Bucket: bucket,
-		//   CopySource: from,
-		//   Key: dest
-		// };
-		
 		try {
 			const allContents = await s3.listObjects({Prefix: from, Bucket: bucket}).promise();
 			const allDonePromise = allContents.Contents.map(content => new Promise(async (resolve, reject) => {
@@ -76,47 +68,30 @@ const withS3 = (bucket, from, dest) => {
 		} catch (error) {
 			reject(error)
 		}
-		
-		// s3.copyObject(params, (err, data) => {
-		//   if (err) return reject(err);
-		
-		//   resolve(data);
-		// })
-		
 	});
 }
 
 const avoidDuplicateCopySrc = (src, destItems) => {
-	const extSrc = path.extname(src)
-	const fileNameSrc = path.basename(src, extSrc)
-	const prefixSrc = path.dirname(src)
-	
-	const COPY_NOTATION = '-COPY-'
-	
-	//search for items that are similar to the src
-	// const genDuplicateName = (num) => `${fileNameSrc}${COPY_NOTATION}${num}`
-	const regex = new RegExp(`^(${fileNameSrc})(${COPY_NOTATION})*`, 'g')
-	const similarItems = destItems.filter(i => i.match(regex))
-	const itemWithMaxIdx = _.maxBy(similarItems, val => val.length + val) //trick : compare by length before compare str
-	
-	// if (similarItems.length === 1) {
-	// 	return path.join(prefixSrc, `${fileNameSrc}${COPY_NOTATION}1${extSrc}`)
-	// }
-	if (!itemWithMaxIdx) return src
-	
-	
-	const idxMax = itemWithMaxIdx.substring(
-		itemWithMaxIdx.lastIndexOf(COPY_NOTATION) + COPY_NOTATION.length,
-		itemWithMaxIdx.lastIndexOf('.'))
-	
-	const idxNew = parseInt(idxMax) + 1 || 1
-	
-	return path.join(prefixSrc, `${fileNameSrc}${COPY_NOTATION}${idxNew}${extSrc}`)
-	
+	const extSrc = path.extname(src);
+	const fileNameSrc = path.basename(src, extSrc);
+	const prefixSrc = path.dirname(src);
+	const COPY_NOTATION = '-COPY-';
+	const regex = new RegExp(`^(${fileNameSrc})(${COPY_NOTATION})*`, 'g');
+	const similarItems = destItems.filter(i => i.match(regex));
+	if (!similarItems.length) return src;
+
+	const idxList = similarItems.map(item => {
+		const idx = item.substring(
+			item.lastIndexOf(COPY_NOTATION) + COPY_NOTATION.length,
+			!!extSrc ? item.lastIndexOf('.') : item.length   //if there is no extension, cut until end of string
+		);
+		return parseInt(idx) || 0;
+	});
+	const idxNew = _.maxBy(idxList, i => i) + 1;
+	return path.join(prefixSrc, `${fileNameSrc}${COPY_NOTATION}${idxNew}${extSrc}`);
 }
 
 module.exports = async (from, dest, options) => {
-	
 	const fileName = path.basename(from);
 	const itemsInDest = await readdir(dest, options)
 	const newItemName = path.join(dest, fileName)
