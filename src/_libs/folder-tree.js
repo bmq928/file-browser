@@ -55,6 +55,14 @@ class FolderTree {
 				} else {
 					return false;
 				}
+			} else if (key === 'well' && meta[key]) {
+				let rs = false;
+				try {
+					rs = meta[key] && ((JSON.parse(meta[key].toLowerCase()).name).search(obj[key].toLowerCase().replace(/\?/g, ".?").replace(/\*/, ".*")) !== -1);
+				} catch (e) {
+					rs = false;
+				}
+				return rs;
 			} else {
 				return meta[key] && ((meta[key].toLowerCase()).search(obj[key].toLowerCase().replace(/\?/g, ".?").replace(/\*/, ".*")) !== -1);
 			}
