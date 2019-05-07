@@ -63,6 +63,8 @@ class FolderTree {
 					rs = false;
 				}
 				return rs;
+			} else if (key === 'datatype' && meta[key]) {
+				return meta[key] && ((meta[key].toLowerCase()) === obj[key].toLowerCase().replace(/\?/g, ".?").replace(/\*/, ".*"));
 			} else {
 				return meta[key] && ((meta[key].toLowerCase()).search(obj[key].toLowerCase().replace(/\?/g, ".?").replace(/\*/, ".*")) !== -1);
 			}
