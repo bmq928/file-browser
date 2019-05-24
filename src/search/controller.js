@@ -24,7 +24,7 @@ const traverseTree = async (rootNode, content, options) => {
 		/*
 			search by metatData with operator
 		 */
-		if (f.containMetaData(content) || fname.includes(_nameSearch)) {
+		if (f.containMetaData(content, fname) || fname.includes(_nameSearch)) {
 			/*
 				search by object type: file|folder|all
 			 */

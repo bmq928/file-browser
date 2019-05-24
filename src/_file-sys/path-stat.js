@@ -35,14 +35,15 @@ const withS3 = (bucket, dir) => {
 			const params = {Bucket: bucket, Prefix: dir};
 			// console.log(params);
 			const data = await s3.listObjectsV2(params).promise();
-			// console.log(data.Contents);
+			// console.log("data list object === ", data.Contents);
 			// console.log(dir);
 			const foundContent = data.Contents.find(
 				content => {
-					// console.log(content.Key, "||", dir, "||", content.Key === dir + '/');
+					// console.log("compares ", content.Key, "||", dir, "||");
 					// let rs = content.Key === dir || content.Key === dir + '/';
 					// loi khi thu muc khong co file con
-					let rs = content.Key.includes(dir) || content.Key.includes(dir + '/');
+					// let rs = content.Key.includes(dir) || content.Key.includes(dir + '/');
+					let rs = content.Key === (dir) || content.Key === (dir + '/');
 					return rs
 				}
 			);
@@ -51,7 +52,7 @@ const withS3 = (bucket, dir) => {
 			// console.log(foundContent);
 			// if (!foundContent) return reject(new Error('Directory is not founded'));
 			if (!foundContent) return resolve(null);
-			// console.log("===", foundContent);
+			// console.log("found content ===", foundContent);
 			// to sync with version that using fs
 			// folder end with /
 			// file doesnt end with /

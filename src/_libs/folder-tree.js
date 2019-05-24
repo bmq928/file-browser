@@ -42,7 +42,7 @@ class FolderTree {
 		this.folders.push(new FolderTree(folderName, false, path, files, folders, size, modifiedDate, metaData));
 	}
 	
-	containMetaData(content) {
+	containMetaData(content, name) {
 		return exploreTree(content.conditions, this.metaData, function (obj, meta) {
 			let key = Object.keys(obj)[0];
 			// if (key === 'name') {
@@ -65,12 +65,11 @@ class FolderTree {
 				return rs;
 			} else if (key === 'datatype' && meta[key]) {
 				return meta[key] && ((meta[key].toLowerCase()) === obj[key].toLowerCase().replace(/\?/g, ".?").replace(/\*/, ".*"));
+			} else if (key === 'location') {
+				return meta[key] && (meta[key].toLowerCase().trim() === obj[key].toLowerCase().trim());
 			} else {
 				return meta[key] && ((meta[key].toLowerCase()).search(obj[key].toLowerCase().replace(/\?/g, ".?").replace(/\*/, ".*")) !== -1);
 			}
-			// } else {
-			// 	return obj[key] === meta[key];
-			// }
 		});
 	}
 }
