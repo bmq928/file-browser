@@ -1,6 +1,6 @@
 const utils = require('../_checking');
 let jwt = require('jsonwebtoken');
-let secretKey = "secretKey";
+let secretKey = process.env.STORAGE_JWTKEY || "secretKey";
 
 module.exports = () => {
 	return (req, res, next) => {
