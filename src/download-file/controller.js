@@ -54,9 +54,9 @@ const downloadMultiFiles = function (payload, options, res) {
             zlib: {level: 9}
         });
         let fileName = Date.now() + '_' + Math.floor(Math.random() * 100000) + '.zip';
-        res.setHeader('Content-disposition', fileName);
-        res.setHeader('Content-type', 'application/zip, application/octet-stream');
-        archive.pipe(res);
+        res.setHeader('Content-disposition', 'attachment');
+        res.setHeader('File-Name', fileName);
+        res.setHeader('Content-type', 'application/octet-steam');
 
         // push all s3 read stream into archive
         for (let i = 0; i < downloadFileKeys.length; i++) {
@@ -77,8 +77,8 @@ const downloadMultiFiles = function (payload, options, res) {
                 }
             }
         }
-
-        archive.finalize().then((res) => {
+        archive.pipe(res);
+        archive.finalize().then(() => {
             console.log('Zip file successfully');
         }).catch((err) => {
             console.log('Zip error:', err.message);
