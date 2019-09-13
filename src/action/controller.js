@@ -8,6 +8,7 @@ const itemCopy = async (from, dest, options) => {
 	
 	from = getPath(from, rootFolderFs, options);
 	dest = getPath(dest, rootFolderFs, options);
+	console.log(from, "===", dest);
 	
 	const data = await copy(from, dest, options);
 	return data;
