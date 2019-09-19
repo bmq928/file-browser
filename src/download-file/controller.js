@@ -75,7 +75,6 @@ const downloadMultiFiles = function (payload, options, res) {
 
         // push all s3 read stream into archive
         for (let i = 0; i < downloadFileKeys.length; i++) {
-            console.log(downloadFileKeys[i])
             let params = {
                 Bucket: options.bucket,
                 Key: downloadFileKeys[i]
