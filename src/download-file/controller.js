@@ -1,9 +1,9 @@
 const config = require('config');
 const rootFolderFs = process.env.STORAGE_ROOT_FOLDER || config.get('rootFolder');
-const {getFile, getPath, readDir} = require('../_file-sys');
+const {pathStat, getFile, getPath, readDir} = require('../_file-sys');
 const archiver = require('archiver');
-const fs = require('fs');
 const {s3} = require('../_aws');
+const _ = require('lodash');
 const download = (filePath, options, res) => {
 
     filePath = getPath(filePath, rootFolderFs, options);
@@ -29,6 +29,25 @@ const download = (filePath, options, res) => {
     })
 };
 
+function getALlPathInFolder(dir, options, path) {
+    return new Promise(resolve => {
+        dir = dir.substring(0, dir.lastIndexOf('/'));
+        readDir(dir, options).then(items => {
+            Promise.all(items.map(item => pathStat(dir + '/' + item, options))).then(pathStats => {
+                if (!pathStats.find(p => p.isDirectory())) resolve();
+                pathStats.forEach(p => {
+                    if (p.isDirectory()) {
+                        let location = p.metaData.location;
+                        resolve(getALlPathInFolder(dir + location.substring(location.lastIndexOf('/'), location.length) + '/', options, path));
+                    } else {
+                        path.push(p.metaData.location);
+                    }
+                });
+            });
+        });
+    })
+}
+
 const downloadMultiFiles = function (payload, options, res) {
     let filePaths = payload.files;
     return new Promise(async (resolve, reject) => {
@@ -37,14 +56,10 @@ const downloadMultiFiles = function (payload, options, res) {
         // fetch all s3 key for download
         for (let i = 0; i < filePaths.length; i++) {
             if (filePaths[i].endsWith('/')) {
-                let items = await readDir(filePaths[i].substring(0, filePaths[i].lastIndexOf('/')), {
-                    bucket: options.bucket,
-                    s3: true
-                });
-                items = items.map(item => filePaths[i] + item);
-                items.forEach(item => {
-                    downloadFileKeys.push(item);
-                })
+                let paths = [];
+                await getALlPathInFolder(filePaths[i], options, paths);
+                paths = paths.map(p => options.dir + p)
+                downloadFileKeys = _.concat(paths, downloadFileKeys);
             } else {
                 downloadFileKeys.push(filePaths[i]);
             }
@@ -60,6 +75,7 @@ const downloadMultiFiles = function (payload, options, res) {
 
         // push all s3 read stream into archive
         for (let i = 0; i < downloadFileKeys.length; i++) {
+            console.log(downloadFileKeys[i])
             let params = {
                 Bucket: options.bucket,
                 Key: downloadFileKeys[i]
